@@ -4,18 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VEIN 配方查询表</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='4' fill='%23e8963a'/><text x='12' y='17' font-size='13' text-anchor='middle' fill='%231a1612' font-family='sans-serif' font-weight='bold'>V</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='4' fill='%234acaa8'/><text x='12' y='17' font-size='13' text-anchor='middle' fill='%2310211e' font-family='sans-serif' font-weight='bold'>V</text></svg>">
 <style>
   :root{
-    --bg:#1a1612; --panel:#262019; --panel2:#2f2820; --line:#3d342a;
-    --text:#e8e0d4; --dim:#9a8d7a; --accent:#e8963a; --accent2:#f2b06a;
-    --green:#7fb069; --red:#d96a5a;
+    --bg:#1a1612; --panel:#2a231c; --panel2:#332b22; --line:#4a3f30;
+    --text:#f0e5d0; --dim:#a89880; --accent:#e8963a; --accent2:#c96a2a;
+    --green:#6a8a4a; --red:#d96a5a;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   body{
     background:var(--bg); color:var(--text);
     font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;
-    line-height:1.6; padding:20px; max-width:1100px; margin:0 auto;
+    line-height:1.6; padding:16px 24px; max-width:100%; margin:0;
   }
   header{margin-bottom:18px;}
   h1{font-size:22px; letter-spacing:1px;}
@@ -39,39 +39,49 @@
   }
   .addbtn:hover{background:var(--accent2);}
 
-  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:12px; margin-top:8px;}
+  .grid{display:block; margin-top:8px;}
+  .cat-block{margin-bottom:24px;}
+  .cat-block .cards{display:grid; grid-template-columns:repeat(5,1fr); gap:10px;}
+  .search-results{display:flex; flex-wrap:wrap; gap:14px; justify-content:center; max-width:1200px; margin:0 auto;}
+  .search-results .card{width:360px; flex-shrink:0; padding:16px; font-size:15px;}
+  .search-results .cardhead .name{font-size:19px;}
+  .search-results .mat{padding:5px 10px; font-size:15px;}
+  .search-results .treebox{font-size:15px;}
+  .cat-title{margin:18px 0 8px;padding:6px 10px;font-size:14px;font-weight:700;color:var(--accent);letter-spacing:1px;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .cat-title::before{content:"";display:inline-block;width:3px;height:16px;background:var(--accent);}
+  .cat-title span{font-size:11px;color:var(--dim);font-weight:normal;margin-left:6px;}
   .card{
-    background:var(--panel); border:1px solid var(--line); border-radius:10px;
-    padding:14px; border-left:3px solid var(--line);
+    background:var(--panel); border:1px solid var(--line); border-radius:8px;
+    padding:14px; border-left:3px solid var(--line); font-size:15px;
   }
   .card.confirmed{border-left-color:var(--green);}
   .card.pending{border-left-color:var(--dim); opacity:.92;}
-  .cardhead{display:flex; justify-content:space-between; align-items:baseline; gap:8px;}
-  .cardhead .name{font-size:17px; font-weight:bold;}
+  .cardhead{display:flex; justify-content:space-between; align-items:baseline; gap:6px;}
+  .cardhead .name{font-size:18px; font-weight:bold;}
   .cardhead .en{font-size:12px; color:var(--dim); font-weight:normal;}
-  .badge{font-size:11px; padding:2px 8px; border-radius:10px; white-space:nowrap;}
+  .badge{font-size:11px; padding:2px 8px; border-radius:8px; white-space:nowrap;}
   .badge.ok{background:rgba(127,176,105,.15); color:var(--green);}
   .badge.todo{background:rgba(154,141,122,.15); color:var(--dim);}
   .badge.user{background:rgba(232,150,58,.18); color:var(--accent2);}
 
-  .label{font-size:12px; color:var(--dim); margin:10px 0 4px;}
+  .label{font-size:13px; color:var(--dim); margin:8px 0 4px;}
   .mats{display:flex; flex-wrap:wrap; gap:6px;}
   .mat{
-    background:var(--panel2); border:1px solid var(--line); border-radius:6px;
-    padding:3px 9px; font-size:13px;
+    background:var(--panel2); border:1px solid var(--line); border-radius:5px;
+    padding:4px 9px; font-size:14px;
   }
   .mat b{color:var(--accent2); margin-left:4px;}
-  .tool{font-size:13px; color:var(--text);}
+  .tool{font-size:14px; color:var(--text);}
   .tool b{color:var(--accent2);}
   .qtyrow{font-size:13px; margin:6px 0; display:flex; align-items:center; gap:6px; color:var(--dim);}
-  .qty{width:64px; padding:4px 6px; background:var(--bg); border:1px solid var(--line); border-radius:5px; color:var(--text); font-size:14px;}
-  .subnote{font-size:11px; color:var(--dim); align-self:center;}
+  .qty{width:56px; padding:3px 6px; background:var(--bg); border:1px solid var(--line); border-radius:5px; color:var(--text); font-size:14px;}
+  .subnote{font-size:12px; color:var(--dim); align-self:center;}
   .rawline{display:flex; flex-wrap:wrap; gap:6px;}
-  .raw{background:rgba(232,150,58,.12); border:1px solid var(--accent); border-radius:6px; padding:3px 9px; font-size:13px;}
+  .raw{background:rgba(232,150,58,.12); border:1px solid var(--accent); border-radius:5px; padding:4px 9px; font-size:14px;}
   .raw b{color:var(--accent2); margin-left:4px;}
   .meta{font-size:12px; color:var(--dim); margin-top:10px; display:flex; gap:12px; flex-wrap:wrap;}
   .del{
-    background:none; border:none; color:var(--red); font-size:12px; cursor:pointer;
+    background:none; border:none; color:var(--red); font-size:13px; cursor:pointer;
     margin-top:8px; padding:0;
   }
   .del:hover{text-decoration:underline;}
@@ -95,14 +105,19 @@
   .formbtns{display:flex; gap:8px; margin-top:4px;}
   .save{background:var(--accent); color:#1a1612; border:none; border-radius:6px; padding:9px 18px; font-weight:bold; cursor:pointer;}
   .cancel{background:none; color:var(--dim); border:1px solid var(--line); border-radius:6px; padding:9px 18px; cursor:pointer;}
-  .note{font-size:12px; color:var(--dim); margin-top:16px; padding-top:12px; border-top:1px solid var(--line);}
+  .note{font-size:11px; color:var(--dim); position:fixed; bottom:0; left:0; right:0; padding:8px 24px; background:var(--bg); border-top:1px solid var(--line); z-index:100;}
 
-.treebox{background:rgba(0,0,0,.25);border-radius:6px;padding:8px 6px;margin:6px 0;font-family:Consolas,monospace;font-size:12px;line-height:1.8;}
-.tree-row{white-space:nowrap;color:#ccc;}
-.tree-line{color:#e8963a;margin-right:2px;}
+.treebox{background:rgba(0,0,0,.25);border-radius:6px;padding:10px 8px;margin:6px 0;font-family:Consolas,monospace;font-size:14px;line-height:1.9;display:none;}
+.treebox.show{display:block;}
+.tree-toggle{cursor:pointer;color:var(--accent);font-size:13px;user-select:none;display:inline-block;margin:4px 0;}
+.tree-toggle:hover{text-decoration:underline;}
+.tree-toggle::before{content:"▶ ";font-size:10px;}
+.tree-toggle.open::before{content:"▼ ";}
+.tree-row{white-space:nowrap;color:#ccc;display:flex;align-items:center;}
+.tree-prefix{color:#5a5040;font-family:monospace;white-space:pre;}
 .tree-name{color:#e0d8c8;}
 .tree-qty{color:#e8963a;margin-left:4px;}
-.tree-tool{color:#666;font-size:11px;margin-left:8px;}
+.tree-tool{color:#888;font-size:12px;margin-left:8px;}
 </style>
 <style>
 
@@ -113,9 +128,8 @@
   --text:#f0e5d0; --dim:#a89880; --accent:#e8963a; --accent2:#c96a2a;
   --rust:#8b4a2a; --green:#6a8a4a;
 }
-body{
+#homeView{
   background:var(--bg);color:var(--text);
-  font-family:"Noto Sans SC",system-ui,sans-serif;
   min-height:100vh;
   background-image:
     repeating-linear-gradient(0deg,transparent,transparent 50px,rgba(0,0,0,.15) 50px,rgba(0,0,0,.15) 51px),
@@ -129,14 +143,6 @@ body{
 #homeView .hero::after{
   content:"";position:absolute;bottom:-2px;left:10%;right:10%;height:2px;
   background:linear-gradient(90deg,transparent,var(--accent),transparent);
-}
-#homeView .avatar{
-  width:90px;height:90px;border-radius:50%;
-  background:var(--accent);margin:0 auto 16px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:36px;font-weight:900;color:var(--bg);
-  border:3px solid var(--accent2);
-  box-shadow:0 0 20px rgba(232,150,58,.3);
 }
 #homeView .hero h1{
   font-size:28px;font-weight:900;letter-spacing:4px;
@@ -193,7 +199,7 @@ body{
 </head>
 <body>
 
-<div id="homeView" style="display:block">
+<div id="homeView" style="display:none">
 <div class="hero">
   <h1>谢峰XF</h1>
   <div class="sub">
@@ -243,16 +249,21 @@ body{
     <button onclick="showApp()" style="background:#e8963a;color:#1a1612;border:none;padding:12px 30px;font-size:15px;font-weight:700;border-radius:6px;cursor:pointer">进入VEIN配方查询 →</button>
   </div>
 </div>
-<div id="appView" style="display:none">
-  <div style="background:#2d251c;border-bottom:1px solid #3d3328;padding:10px 16px;display:flex;align-items:center;gap:12px">
-    <button onclick="showHome()" style="background:none;border:1px solid #e8963a;color:#e8963a;padding:6px 14px;border-radius:4px;cursor:pointer;font-size:13px">← 返回主页</button>
-    <span style="color:#8a7d6a;font-size:13px">VEIN配方查询表</span>
+<div id="appView" style="display:block">
+  <div style="background:#332b22;border-bottom:1px solid #4a3f30;padding:10px 16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+    <span style="color:var(--dim);font-size:13px">VEIN配方查询 · 输入物品名自动展开材料</span>
+    <button class="tab-btn active" data-tab="recipe" onclick="switchTab('recipe')" style="background:#e8963a;color:#1a1612;border:none;padding:6px 14px;border-radius:4px;cursor:pointer;font-size:13px;font-weight:700">配方查询</button>
+    <button class="tab-btn" data-tab="skills" onclick="switchTab('skills')" style="background:none;border:1px solid #4a3f30;color:#a89880;padding:6px 14px;border-radius:4px;cursor:pointer;font-size:13px">技能属性</button>
+    <button class="tab-btn" data-tab="survival" onclick="switchTab('survival')" style="background:none;border:1px solid #4a3f30;color:#a89880;padding:6px 14px;border-radius:4px;cursor:pointer;font-size:13px">生存医疗</button>
+    <button class="tab-btn" data-tab="tools" onclick="switchTab('tools')" style="background:none;border:1px solid #4a3f30;color:#a89880;padding:6px 14px;border-radius:4px;cursor:pointer;font-size:13px">工具等级</button>
+    <button class="tab-btn" data-tab="guns" onclick="switchTab('guns')" style="background:none;border:1px solid #4a3f30;color:#a89880;padding:6px 14px;border-radius:4px;cursor:pointer;font-size:13px">枪械弹药</button>
   </div>
 <header>
   <h1>VEIN 配方查询表<small>输入物品名，自动跳出材料</small></h1>
   <div class="subtitle">绿色边=材料已确认 · 灰色边=材料待你进游戏补充 · 点右上角「+ 添加配方」自己录入</div>
 </header>
 
+<div id="recipeTab">
 <div class="searchbar">
   <input id="search" type="text" placeholder="输入物品名，如：电容器 / capacitor / 高级元件…" autocomplete="off">
   <div class="hint">
@@ -289,92 +300,29 @@ const PRESET = [
   {name:"布绳", en:"Rope", confirmed:true,
    mats:[["废布料",1]], tool:"基础切割工具", time:"0:05", unlock:"初期",
    note:""},
-  {name:"原木", en:"Raw Wood", confirmed:false,
-   mats:[], tool:"", time:"", unlock:"", note:"原材料，靠砍伐/搜刮获得，不可合成"},
-  {name:"铝锭", en:"Aluminum Ingot", confirmed:true,
-   mats:[["废铝",10],["铝土矿粉",5]], tool:"熔炉", time:"0:04", unlock:"", note:"冶炼产出；高级铝箔要用"},
-  {name:"铜锭", en:"Copper Ingot", confirmed:true,
-   mats:[["粗黄铜矿",3],["电子废料",5],["破损电线",10]], tool:"熔炉", time:"0:04", unlock:"", note:"冶炼产出；铜线捆要用"},
-  {name:"塑料锭", en:"Plastic Ingot", confirmed:true,
-   mats:[["废塑料",10]], tool:"熔炉", time:"0:02", unlock:"", note:"熔炼产出；塑料外壳要用"},
-  {name:"粗铝土矿", en:"Raw Bauxite", confirmed:false,
-   mats:[], tool:"", time:"", unlock:"", note:"原材料，挖矿获得；铝土矿粉原料"},
-  {name:"粗石灰石", en:"Raw Limestone", confirmed:false,
-   mats:[], tool:"", time:"", unlock:"", note:"原材料，挖矿获得；石灰石粉原料"},
-  {name:"破损电线", en:"Damaged Wiring", confirmed:false,
-   mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮/拆解电器；铜线捆原料"},
-  {name:"袋装混凝土拌料", en:"Concrete Mix Bag", confirmed:false,
-   mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮杂货店/工地；混凝土浆原料"},
-  {name:"锯末", en:"Sawdust", confirmed:true,
-   mats:[["废木料",2]], tool:"基础切割工具", time:"0:04", unlock:"",
-   note:"引火物/废塑料/简易保温板要用"},
-  {name:"电容器", en:"Capacitor", confirmed:true,
-   mats:[["高级元件",1],["塑料外壳",2],["高级铝箔",2]],
-   tool:"焊接工具", time:"0:15", unlock:"制作 Lv.60",
-   note:"用于电子设备高级配方"},
   {name:"金属支架", en:"Metal Bracket", confirmed:true,
    mats:[["废铁",1]], tool:"锤子、基础钳子", time:"0:04", unlock:"",
    note:"绝大多数防御工事与大型造物的基础构件"},
-  {name:"小块废金属板", en:"Small Scrap Metal Sheet", confirmed:true,
-   mats:[["废金属板",1]], tool:"重型切割工具", time:"0:08", unlock:"制作 Lv.60",
-   note:"被切割成许多小块的废金属板"},
   {name:"钉子", en:"Nails", confirmed:true,
    mats:[["废铁",1]], tool:"基础钳子", time:"0:04", unlock:"",
    note:"简易钉子，由拉直的长条废铁制成；螺丝的原料"},
   {name:"木板", en:"Wooden Plank", confirmed:true,
    mats:[["原木",1]], tool:"锯木机", time:"0:04", unlock:"",
    note:"锯木机产出"},
+  {name:"强化木板", en:"Reinforced Plank", confirmed:true,
+   mats:[["木板",1],["金属支架",1],["螺丝",1]],
+   tool:"基础切割工具、螺丝刀", time:"0:09", unlock:"制作 Lv.25",
+   note:"半成品；表面用金属板强化"},
   {name:"螺丝", en:"Screws", confirmed:true,
    mats:[["钉子",1]], tool:"重型钳子", time:"0:02", unlock:"",
    note:"半成品；强化木板/强化木杆都要用"},
   {name:"木杆", en:"Wooden Rod", confirmed:true,
    mats:[["木板",1]], tool:"锯木机", time:"0:04", unlock:"",
    note:"锯木机产出"},
-  {name:"强化木板", en:"Reinforced Plank", confirmed:true,
-   mats:[["木板",1],["金属支架",1],["螺丝",1]],
-   tool:"基础切割工具、螺丝刀", time:"0:09", unlock:"制作 Lv.25",
-   note:"半成品；表面用金属板强化"},
   {name:"强化木杆", en:"Reinforced Rod", confirmed:true,
    mats:[["木杆",1],["金属支架",1],["螺丝",1]],
    tool:"基础切割工具、螺丝刀", time:"0:09", unlock:"制作 Lv.25",
    note:"半成品；表面用金属板强化"},
-  {name:"汽车刹车总成", en:"Brake Assembly", confirmed:true,
-   mats:[["载具刹车片",2],["小块废金属板",4],["重型螺栓",5]],
-   tool:"基础焊机", time:"1:30", unlock:"载具维修",
-   note:"成品；其中载具刹车片、重型螺栓是半成品；汽车拆卸：车轮，需电动螺丝刀+锤子"},
-  {name:"载具刹车片", en:"Brake Pad", confirmed:false,
-   mats:[], tool:"", time:"", unlock:"", note:"半成品，被汽车刹车总成使用；靠搜刮/拆解获得，不可合成"},
-  {name:"重型螺栓", en:"Heavy Bolt", confirmed:true,
-   mats:[["高级铁锭",1]], tool:"重型锤子", time:"0:04", unlock:"",
-   note:"半成品，做汽车刹车总成要用"},
-
-  // ---- 以下物品已确认存在，但材料明细待游戏内补充 ----
-  {name:"放大器", en:"Amplifier", confirmed:true,
-   mats:[["元件",2],["小块废金属板",1]],
-   tool:"焊接工具", time:"0:20", unlock:"",
-   note:""},
-  {name:"高级元件", en:"Advanced Components", confirmed:true,
-   mats:[["元件",3],["塑料外壳",2],["高级铝箔",1]],
-   tool:"焊接工具", time:"0:12", unlock:"制作 Lv.60",
-   note:"一套精密的高级电子元件"},
-  {name:"塑料外壳", en:"Plastic Casings", confirmed:true,
-   mats:[["塑料锭",1]], tool:"重型切割工具", time:"0:05", unlock:"制作 Lv.55",
-   note:"小型零件/电子元件绝缘层"},
-  {name:"高级铝箔", en:"Hi-Grade Aluminum Foil", confirmed:true,
-   mats:[["铝锭",1]], tool:"重型锤子、电钻", time:"0:07", unlock:"建造 Lv.60",
-   note:"电子设备用，做电容器/高级元件要用"},
-  {name:"强化金属支架", en:"Reinforced Metal Brackets", confirmed:true,
-   mats:[["金属支架",1],["混凝土浆",1],["螺丝",2]],
-   tool:"电动螺丝刀、基础钳子", time:"0:05", unlock:"制作 Lv.50",
-   note:"强化过的金属支架"},
-  {name:"元件", en:"Components", confirmed:true,
-   mats:[["铜线捆",2],["塑料外壳",2]],
-   tool:"电动螺丝刀", time:"0:08", unlock:"制作 Lv.55",
-   note:"精密废旧电子零件组合"},
-  {name:"铜线捆", en:"Copper Wire Bundle", confirmed:true,
-   mats:[["破损电线",2],["塑料外壳",2],["铜锭",1]],
-   tool:"电动螺丝刀", time:"0:05", unlock:"制作 Lv.55",
-   note:"一捆可用的铜线；元件/炉灶加热元件要用"},
   {name:"冰箱压缩机", en:"Fridge Compressor", confirmed:true,
    mats:[["高级元件",1],["小块废金属板",1],["废金属管",1]],
    tool:"焊接工具", time:"0:20", unlock:"",
@@ -382,245 +330,215 @@ const PRESET = [
   {name:"弹簧", en:"Spring", confirmed:true,
    mats:[["废铁",2]], tool:"重型钳子", time:"0:04", unlock:"",
    note:"手工制作的弹簧"},
+  {name:"电容器", en:"Capacitor", confirmed:true,
+   mats:[["高级元件",1],["塑料外壳",2],["高级铝箔",2]],
+   tool:"焊接工具", time:"0:15", unlock:"制作 Lv.60",
+   note:"用于电子设备高级配方"},
+  {name:"放大器", en:"Amplifier", confirmed:true,
+   mats:[["元件",2],["小块废金属板",1]],
+   tool:"焊接工具", time:"0:20", unlock:"",
+   note:""},
+  {name:"高级铝箔", en:"Hi-Grade Aluminum Foil", confirmed:true,
+   mats:[["铝锭",1]], tool:"重型锤子、电钻", time:"0:07", unlock:"建造 Lv.60",
+   note:"电子设备用，做电容器/高级元件要用"},
+  {name:"高级元件", en:"Advanced Components", confirmed:true,
+   mats:[["元件",3],["塑料外壳",2],["高级铝箔",1]],
+   tool:"焊接工具", time:"0:12", unlock:"制作 Lv.60",
+   note:"一套精密的高级电子元件"},
   {name:"炉灶加热元件", en:"Stove Heating Elements", confirmed:true,
    mats:[["高级元件",1],["小块废金属板",1],["铜线捆",5]],
    tool:"焊接工具", time:"0:20", unlock:"电气图纸 Lv.70",
    note:"搭建炉灶所需的重要零件"},
-  {name:"电池充电器", en:"Battery Charger", confirmed:false, mats:[], tool:"", time:"", unlock:"电气建筑 Lv.10", note:"600 XP/个"},
-  {name:"简易电池", en:"Makeshift Battery", confirmed:false, mats:[], tool:"", time:"", unlock:"电气建筑 Lv.15", note:"2793 XP/个"},
-  {name:"简易冰柜", en:"Makeshift Freezer", confirmed:false, mats:[], tool:"", time:"", unlock:"电气建筑 Lv.25", note:"2793 XP/个"},
-  {name:"简易冰箱", en:"Makeshift Fridge", confirmed:false, mats:[], tool:"", time:"", unlock:"电气建筑 Lv.25", note:"2793 XP/个"},
-  {name:"燃气发电机", en:"Gas Generator", confirmed:false, mats:[], tool:"", time:"", unlock:"电气建筑 Lv.30", note:"2793 XP/个"},
-  {name:"简易太阳能板", en:"Makeshift Solar Panel", confirmed:false, mats:[], tool:"", time:"", unlock:"电气建筑 Lv.50", note:"5409 XP/个"},
-  {name:"简易风车", en:"Makeshift Windmill", confirmed:false, mats:[], tool:"", time:"", unlock:"电气建筑 Lv.50", note:"5409 XP/个"},
-  {name:"壁挂摄像头", en:"Wall-Mounted Camera", confirmed:false, mats:[], tool:"", time:"", unlock:"电气建筑 Lv.75", note:"5409 XP/个，需水晶"},
-  {name:"水晶", en:"Crystal", confirmed:true,
-   mats:[["珠宝废料",25],["羟基乙酸",1]], tool:"重型钳子", time:"0:10", unlock:"制作 Lv.80",
-   note:"珠宝废料×25+羟基乙酸25ml；大型透镜/壁挂摄像头要用"},
-  {name:"大型透镜", en:"Large Lens", confirmed:true,
-   mats:[["水晶",2]], tool:"重型钳子", time:"0:10", unlock:"制作 Lv.80",
-   note:"双筒望远镜要用"},
-  {name:"小废金属板", en:"Small Scrap Metal Sheet", confirmed:true,
-   mats:[["废金属板",1]], tool:"重型切割工具", time:"0:08", unlock:"制作 Lv.60",
-   note:"多个电气/载具配方要用"},
-  {name:"废金属板", en:"Scrap Metal Sheet", confirmed:true,
-   mats:[["铁锭",2],["强化金属支架",3]],
-   tool:"基础焊机、重型锤子、电钻", time:"0:10", unlock:"制作 Lv.60",
-   note:"结实的废金属板"},
-  {name:"废金属管", en:"Scrap Metal Pipe", confirmed:true,
-   mats:[["铁锭",1],["强化金属支架",2]],
-   tool:"基础焊机、重型切割工具、电钻", time:"0:10", unlock:"制作 Lv.60",
-   note:"冰箱压缩机/铁丝网要用"},
-  {name:"石墨粉", en:"Graphite Powder", confirmed:true,
-   mats:[["粗石墨",1]], tool:"矿石粉碎机", time:"0:04", unlock:"",
-   note:"矿石粉碎机产出；磨碎的石墨粉，制作高级金属锭"},
-  {name:"玻璃粉", en:"Glass Powder", confirmed:true,
-   mats:[["玻璃板",1],["碎玻璃",30]], tool:"矿石粉碎机", time:"0:04", unlock:"",
-   note:"矿石粉碎机产出；做玻璃纤维板用"},
-  {name:"石灰石粉", en:"Limestone Powder", confirmed:true,
-   mats:[["粗石灰石",1]], tool:"矿石粉碎机", time:"0:04", unlock:"",
-   note:"矿石粉碎机产出；切勿吸入；高级制作配方用"},
   {name:"铝土矿粉", en:"Bauxite Powder", confirmed:true,
    mats:[["粗铝土矿",1]], tool:"矿石粉碎机", time:"0:04", unlock:"",
    note:"矿石粉碎机产出；切勿吸入；高级制作配方用"},
-
-  // ---- 载具配件 ----
+  {name:"强化金属支架", en:"Reinforced Metal Brackets", confirmed:true,
+   mats:[["金属支架",1],["混凝土浆",1],["螺丝",2]],
+   tool:"电动螺丝刀、基础钳子", time:"0:05", unlock:"制作 Lv.50",
+   note:"强化过的金属支架"},
+  {name:"石灰石粉", en:"Limestone Powder", confirmed:true,
+   mats:[["粗石灰石",1]], tool:"矿石粉碎机", time:"0:04", unlock:"",
+   note:"矿石粉碎机产出；切勿吸入；高级制作配方用"},
+  {name:"塑料外壳", en:"Plastic Casings", confirmed:true,
+   mats:[["塑料锭",1]], tool:"重型切割工具", time:"0:05", unlock:"制作 Lv.55",
+   note:"小型零件/电子元件绝缘层"},
+  {name:"铜线捆", en:"Copper Wire Bundle", confirmed:true,
+   mats:[["破损电线",2],["塑料外壳",2],["铜锭",1]],
+   tool:"电动螺丝刀", time:"0:05", unlock:"制作 Lv.55",
+   note:"一捆可用的铜线；元件/炉灶加热元件要用"},
+  {name:"元件", en:"Components", confirmed:true,
+   mats:[["铜线捆",2],["塑料外壳",2]],
+   tool:"电动螺丝刀", time:"0:08", unlock:"制作 Lv.55",
+   note:"精密废旧电子零件组合"},
+  {name:"水晶", en:"Crystal", confirmed:true,
+   mats:[["珠宝废料",25],["羟基乙酸",1]], tool:"重型钳子", time:"0:10", unlock:"制作 Lv.80",
+   note:"珠宝废料×25+羟基乙酸25ml；大型透镜/壁挂摄像头要用"},
   {name:"发动机正时皮带", en:"Timing Belt", confirmed:true,
    mats:[["橡胶卷",1]], tool:"重型切割工具", time:"0:08", unlock:"",
    note:"汽车发动机零件；汽车拆卸：发动机，需螺丝刀+扳手"},
+  {name:"玻璃粉", en:"Glass Powder", confirmed:true,
+   mats:[["玻璃板",1],["碎玻璃",30]], tool:"矿石粉碎机", time:"0:04", unlock:"",
+   note:"矿石粉碎机产出；做玻璃纤维板用"},
+  {name:"石墨粉", en:"Graphite Powder", confirmed:true,
+   mats:[["粗石墨",1]], tool:"矿石粉碎机", time:"0:04", unlock:"",
+   note:"矿石粉碎机产出；磨碎的石墨粉，制作高级金属锭"},
+  {name:"重型螺栓", en:"Heavy Bolt", confirmed:true,
+   mats:[["高级铁锭",1]], tool:"重型锤子", time:"0:04", unlock:"",
+   note:"半成品，做汽车刹车总成要用"},
+  {name:"大型透镜", en:"Large Lens", confirmed:true,
+   mats:[["水晶",2]], tool:"重型钳子", time:"0:10", unlock:"制作 Lv.80",
+   note:"双筒望远镜要用"},
   {name:"橡胶皮带", en:"Rubber Belt", confirmed:true,
    mats:[["橡胶卷",1]], tool:"重型切割工具", time:"0:08", unlock:"",
    note:"机械设备用"},
   {name:"橡胶卷", en:"Rubber Roll", confirmed:true,
-   mats:[["废橡胶",10],["胶水",1]], tool:"重型切割工具", time:"0:08", unlock:"",
+   mats:[["废橡胶",10],["胶水350ml",1]], tool:"重型切割工具", time:"0:08", unlock:"",
    note:"废橡胶×10+胶水350ml；绝缘材料"},
-  {name:"汽车滤清器", en:"Car Filter", confirmed:true,
-   mats:[["废塑料",5],["布绳",2],["废布料",2]], tool:"重型钉枪", time:"1:00", unlock:"",
-   note:"汽车滤芯；汽车拆卸：发动机，需螺丝刀"},
-  {name:"汽车油箱", en:"Car Fuel Tank", confirmed:true,
-   mats:[["小块废金属板",4],["重型螺栓",5],["强化金属支架",2]],
-   tool:"基础焊机", time:"2:00", unlock:"",
-   note:"汽车油箱；汽车拆卸：发动机，需工业级切割工具+基础焊机+重型钳子+扳手"},
-
-  // ---- 锁具链 ----
-  {name:"标准锁", en:"Standard Lock", confirmed:true,
-   mats:[["废铁",1],["金属支架",1]], tool:"螺丝刀", time:"0:10", unlock:"",
-   note:"撬锁难度适中；强化锁原料"},
-  {name:"强化锁", en:"Enhanced Lock", confirmed:true,
-   mats:[["标准锁",1],["金属支架",1]], tool:"螺丝刀", time:"0:15", unlock:"制作 Lv.25",
-   note:"高级锁，无法撬开；密码锁原料"},
-  {name:"密码锁", en:"Code Lock", confirmed:true,
-   mats:[["强化锁",1],["电子废料",1]], tool:"电动螺丝刀、重型钳子", time:"0:25", unlock:"电工 Lv.5",
-   note:"电子密码锁"},
-  {name:"撬锁工具", en:"Lockpick", confirmed:true,
-   mats:[["剪刀",1],["弹簧",5]], tool:"重型钳子", time:"0:05", unlock:"图纸 Lv.25",
-   note:"容易损坏"},
-
-  // ---- 工具链 ----
-  {name:"十字螺丝刀", en:"Phillips Screwdriver", confirmed:true,
-   mats:[["废铁",1],["废塑料",1]], tool:"基础钳子", time:"0:30", unlock:"",
-   note:"基础螺丝刀"},
-  {name:"老虎钳", en:"Pliers", confirmed:true,
-   mats:[["废铁",1],["木杆",1]], tool:"锤子", time:"0:30", unlock:"",
-   note:"基础钳子"},
-  {name:"羊角锤", en:"Claw Hammer", confirmed:true,
-   mats:[["废木料",1],["废铁",1]], tool:"", time:"0:30", unlock:"",
-   note:"基础锤子；迷你大锤原料"},
-  {name:"迷你大锤", en:"Mini Sledgehammer", confirmed:true,
-   mats:[["羊角锤",1],["金属支架",2],["强化木杆",1]], tool:"重型钳子", time:"0:45", unlock:"",
-   note:"大锤迷你版"},
-  {name:"剪刀", en:"Scissors", confirmed:true,
-   mats:[["废铁",1],["废塑料",1],["钉子",1]], tool:"基础钳子", time:"0:30", unlock:"",
-   note:"钢锯/撬锁工具/圆锯片原料"},
-  {name:"钢锯", en:"Hacksaw", confirmed:true,
-   mats:[["剪刀",2],["金属支架",2],["废塑料",1]], tool:"重型钳子", time:"0:30", unlock:"",
-   note:"大型锯子"},
-  {name:"圆锯片", en:"Circular Saw Blade", confirmed:true,
-   mats:[["铁锭",1],["剪刀",1]], tool:"重型锤子", time:"0:07", unlock:"",
-   note:"电动切割工具用；砂轮片原料"},
-  {name:"砂轮片", en:"Grinding Disc", confirmed:true,
-   mats:[["圆锯片",1],["重型螺栓",6]], tool:"重型切割工具", time:"0:08", unlock:"",
-   note:"工业级切割工具用"},
-  {name:"钻头", en:"Drill Bit", confirmed:true,
-   mats:[["重型螺栓",1],["剪刀",1]], tool:"重型切割工具", time:"0:05", unlock:"",
-   note:"电钻专用"},
-
-  // ---- 订书钉/焊丝/枪钉链 ----
-  {name:"基础订书钉", en:"Basic Staples", confirmed:true,
-   mats:[["弹簧",1]], tool:"重型钳子", time:"0:05", unlock:"",
-   note:"基础订书机用；重型枪钉原料"},
-  {name:"重型枪钉", en:"Heavy Staples", confirmed:true,
-   mats:[["弹簧",5],["基础订书钉",2]], tool:"重型钳子", time:"0:06", unlock:"",
-   note:"重型钉枪用；框架枪钉包原料"},
-  {name:"框架枪钉包", en:"Frame Nail Pack", confirmed:true,
-   mats:[["弹簧",5],["重型枪钉",2]], tool:"重型钳子", time:"0:09", unlock:"",
-   note:"工业级钉枪用"},
-  {name:"基础焊丝", en:"Basic Welding Wire", confirmed:true,
-   mats:[["弹簧",4],["高级铝箔",2]], tool:"工业级螺丝刀", time:"0:07", unlock:"",
-   note:"基础焊机用；工业级焊丝原料"},
-  {name:"工业级焊丝", en:"Industrial Welding Wire", confirmed:true,
-   mats:[["弹簧",4],["高级铝箔",2],["基础焊丝",2]], tool:"基础焊机", time:"0:09", unlock:"",
-   note:"工业级焊机用"},
-  {name:"基础螺丝刀头", en:"Basic Screwdriver Bit", confirmed:true,
-   mats:[["螺丝",4]], tool:"重型切割工具", time:"0:05", unlock:"",
-   note:"电动螺丝刀用（十字/一字）"},
-  {name:"工业级螺丝刀头", en:"Industrial Screwdriver Bit", confirmed:true,
-   mats:[["重型螺栓",1]], tool:"重型切割工具", time:"0:09", unlock:"",
-   note:"工业级螺丝刀用（十字/一字）"},
-
-  // ---- 电子/电气补充 ----
-  {name:"无线电接收器", en:"Radio Receiver", confirmed:true,
-   mats:[["元件",3],["重型螺栓",2],["电容器",2]], tool:"焊接工具", time:"1:00", unlock:"电气图纸 Lv.60",
-   note:"手持无线电/1级遥控器要用"},
-  {name:"无线电发射器", en:"Radio Transmitter", confirmed:true,
-   mats:[["元件",5],["电容器",2]], tool:"焊接工具", time:"1:00", unlock:"电气图纸",
-   note:"手持无线电/1级遥控器要用"},
-  {name:"手持无线电", en:"Handheld Radio", confirmed:true,
-   mats:[["电子废料",10],["无线电接收器",1],["无线电发射器",1]],
-   tool:"焊接工具、基础钳子、螺丝刀", time:"0:30", unlock:"",
-   note:"基础对讲机"},
+  {name:"废金属管", en:"Scrap Metal Pipe", confirmed:true,
+   mats:[["铁锭",1],["强化金属支架",2]],
+   tool:"基础焊机、重型切割工具、电钻", time:"0:10", unlock:"制作 Lv.60",
+   note:"冰箱压缩机/铁丝网要用"},
+  {name:"废金属板", en:"Scrap Metal Sheet", confirmed:true,
+   mats:[["铁锭",2],["强化金属支架",3]],
+   tool:"基础焊机、重型锤子、电钻", time:"0:10", unlock:"制作 Lv.60",
+   note:"结实的废金属板"},
+  {name:"小块废金属板", en:"Small Scrap Metal Sheet", confirmed:true,
+   mats:[["废金属板",1]], tool:"重型切割工具", time:"0:08", unlock:"制作 Lv.60",
+   note:"被切割成许多小块的废金属板"},
   {name:"1级遥控器", en:"Remote Lv.1", confirmed:true,
    mats:[["电子废料",10],["废塑料",5],["无线电发射器",1]],
    tool:"焊接工具、重型钳子、螺丝刀", time:"0:45", unlock:"",
    note:"遥控陷阱配对"},
-  {name:"手电筒", en:"Flashlight", confirmed:true,
-   mats:[["灯泡",1],["废塑料",2],["电子废料",1]], tool:"螺丝刀", time:"0:30", unlock:"图纸 Lv.10",
-   note:""},
-  {name:"GPS", en:"GPS", confirmed:true,
-   mats:[["元件",2],["塑料外壳",1],["手机",1]],
-   tool:"焊接工具、基础钳子、螺丝刀", time:"0:45", unlock:"电气图纸 Lv.50",
-   note:"手持式GPS装置"},
-
-  // ---- 工具/杂项 ----
+  {name:"标准锁", en:"Standard Lock", confirmed:true,
+   mats:[["废铁",1],["金属支架",1]], tool:"螺丝刀", time:"0:10", unlock:"",
+   note:"撬锁难度适中；强化锁原料"},
   {name:"打火机", en:"Lighter", confirmed:true,
    mats:[["废塑料",5],["金属支架",2],["弹簧",1]], tool:"重型钳子", time:"0:20", unlock:"",
    note:""},
+  {name:"炖锅", en:"Cooking Pot", confirmed:true,
+   mats:[["玻璃碗",1],["木杆",1],["废铁",3]], tool:"基础钳子", time:"0:30", unlock:"",
+   note:"烹饪用"},
+  {name:"钢锯", en:"Hacksaw", confirmed:true,
+   mats:[["剪刀",2],["金属支架",2],["废塑料",1]], tool:"重型钳子", time:"0:30", unlock:"",
+   note:"大型锯子"},
+  {name:"工业级焊丝", en:"Industrial Welding Wire", confirmed:true,
+   mats:[["弹簧",4],["高级铝箔",2],["基础焊丝",2]], tool:"基础焊机", time:"0:09", unlock:"",
+   note:"工业级焊机用"},
+  {name:"工业级螺丝刀头", en:"Industrial Screwdriver Bit", confirmed:true,
+   mats:[["重型螺栓",1]], tool:"重型切割工具", time:"0:09", unlock:"",
+   note:"工业级螺丝刀用（十字/一字）"},
+  {name:"基础订书钉", en:"Basic Staples", confirmed:true,
+   mats:[["弹簧",1]], tool:"重型钳子", time:"0:05", unlock:"",
+   note:"基础订书机用；重型枪钉原料"},
+  {name:"基础焊丝", en:"Basic Welding Wire", confirmed:true,
+   mats:[["弹簧",4],["高级铝箔",2]], tool:"工业级螺丝刀", time:"0:07", unlock:"",
+   note:"基础焊机用；工业级焊丝原料"},
+  {name:"基础螺丝刀头", en:"Basic Screwdriver Bit", confirmed:true,
+   mats:[["螺丝",4]], tool:"重型切割工具", time:"0:05", unlock:"",
+   note:"电动螺丝刀用（十字/一字）"},
   {name:"记事本", en:"Notebook", confirmed:true,
    mats:[["报纸",1],["废纸",3]], tool:"基础切割工具", time:"0:04", unlock:"",
    note:""},
-  {name:"指南针", en:"Compass", confirmed:true,
-   mats:[["废铁",1],["钉子",1],["金属支架",1]], tool:"螺丝刀", time:"0:20", unlock:"",
-   note:"判断方向"},
+  {name:"剪刀", en:"Scissors", confirmed:true,
+   mats:[["废铁",1],["废塑料",1],["钉子",1]], tool:"基础钳子", time:"0:30", unlock:"",
+   note:"钢锯/撬锁工具/圆锯片原料"},
+  {name:"烤盘", en:"Baking Tray", confirmed:true,
+   mats:[["混凝土浆",3]], tool:"重型切割工具", time:"0:30", unlock:"",
+   note:"陶瓷烤盘，烹饪用"},
+  {name:"框架枪钉包", en:"Frame Nail Pack", confirmed:true,
+   mats:[["弹簧",5],["重型枪钉",2]], tool:"重型钳子", time:"0:09", unlock:"",
+   note:"工业级钉枪用"},
+  {name:"老虎钳", en:"Pliers", confirmed:true,
+   mats:[["废铁",1],["木杆",1]], tool:"锤子", time:"0:30", unlock:"",
+   note:"基础钳子"},
+  {name:"迷你大锤", en:"Mini Sledgehammer", confirmed:true,
+   mats:[["羊角锤",1],["金属支架",2],["强化木杆",1]], tool:"重型钳子", time:"0:45", unlock:"",
+   note:"大锤迷你版"},
+  {name:"密码锁", en:"Code Lock", confirmed:true,
+   mats:[["强化锁",1],["电子废料",1]], tool:"电动螺丝刀、重型钳子", time:"0:25", unlock:"电工 Lv.5",
+   note:"电子密码锁"},
+  {name:"汽车滤清器", en:"Car Filter", confirmed:true,
+   mats:[["废塑料",5],["布绳",2],["废布料",2]], tool:"重型钉枪", time:"1:00", unlock:"",
+   note:"汽车滤芯；汽车拆卸：发动机，需螺丝刀"},
+  {name:"汽车刹车总成", en:"Brake Assembly", confirmed:true,
+   mats:[["载具刹车片",2],["小块废金属板",4],["重型螺栓",5]],
+   tool:"基础焊机", time:"1:30", unlock:"载具维修",
+   note:"成品；其中载具刹车片、重型螺栓是半成品；汽车拆卸：车轮，需电动螺丝刀+锤子"},
+  {name:"汽车油箱", en:"Car Fuel Tank", confirmed:true,
+   mats:[["小块废金属板",4],["重型螺栓",5],["强化金属支架",2]],
+   tool:"基础焊机", time:"2:00", unlock:"",
+   note:"汽车油箱；汽车拆卸：发动机，需工业级切割工具+基础焊机+重型钳子+扳手"},
+  {name:"强化锁", en:"Enhanced Lock", confirmed:true,
+   mats:[["标准锁",1],["金属支架",1]], tool:"螺丝刀", time:"0:15", unlock:"制作 Lv.25",
+   note:"高级锁，无法撬开；密码锁原料"},
+  {name:"撬锁工具", en:"Lockpick", confirmed:true,
+   mats:[["剪刀",1],["弹簧",5]], tool:"重型钳子", time:"0:05", unlock:"图纸 Lv.25",
+   note:"容易损坏"},
+  {name:"砂轮片", en:"Grinding Disc", confirmed:true,
+   mats:[["圆锯片",1],["重型螺栓",6]], tool:"重型切割工具", time:"0:08", unlock:"",
+   note:"工业级切割工具用"},
+  {name:"十字螺丝刀", en:"Phillips Screwdriver", confirmed:true,
+   mats:[["废铁",1],["废塑料",1]], tool:"基础钳子", time:"0:30", unlock:"",
+   note:"基础螺丝刀"},
+  {name:"手持无线电", en:"Handheld Radio", confirmed:true,
+   mats:[["电子废料",10],["无线电接收器",1],["无线电发射器",1]],
+   tool:"焊接工具、基础钳子、螺丝刀", time:"0:30", unlock:"",
+   note:"基础对讲机"},
+  {name:"手电筒", en:"Flashlight", confirmed:true,
+   mats:[["灯泡",1],["废塑料",2],["电子废料",1]], tool:"螺丝刀", time:"0:30", unlock:"图纸 Lv.10",
+   note:""},
   {name:"双筒望远镜", en:"Binoculars", confirmed:true,
    mats:[["废塑料",5],["金属支架",2],["大型透镜",2]], tool:"重型钳子", time:"0:45", unlock:"",
    note:"观测远方"},
   {name:"水袋", en:"Water Bag", confirmed:true,
    mats:[["软皮革条",1],["针线",1]], tool:"基础切割工具", time:"0:10", unlock:"",
    note:"储存液体"},
+  {name:"无线电发射器", en:"Radio Transmitter", confirmed:true,
+   mats:[["元件",5],["电容器",2]], tool:"焊接工具", time:"1:00", unlock:"电气图纸",
+   note:"手持无线电/1级遥控器要用"},
+  {name:"无线电接收器", en:"Radio Receiver", confirmed:true,
+   mats:[["元件",3],["重型螺栓",2],["电容器",2]], tool:"焊接工具", time:"1:00", unlock:"电气图纸 Lv.60",
+   note:"手持无线电/1级遥控器要用"},
+  {name:"研钵和杵", en:"Mortar and Pestle", confirmed:true,
+   mats:[["粗石灰石",2]], tool:"锤子、螺丝刀", time:"1:00", unlock:"",
+   note:"研磨香料/材料"},
+  {name:"羊角锤", en:"Claw Hammer", confirmed:true,
+   mats:[["废木料",1],["废铁",1]], tool:"", time:"0:30", unlock:"",
+   note:"基础锤子；迷你大锤原料"},
   {name:"鱼钩", en:"Fish Hook", confirmed:true,
    mats:[["废铁",1],["缝衣针",1]], tool:"锤子、基础钳子", time:"0:05", unlock:"",
    note:""},
   {name:"鱼线", en:"Fishing Line", confirmed:true,
    mats:[["线材",1]], tool:"基础切割工具", time:"0:05", unlock:"",
    note:""},
-  {name:"研钵和杵", en:"Mortar and Pestle", confirmed:true,
-   mats:[["粗石灰石",2]], tool:"锤子、螺丝刀", time:"1:00", unlock:"",
-   note:"研磨香料/材料"},
-  {name:"炖锅", en:"Cooking Pot", confirmed:true,
-   mats:[["玻璃碗",1],["木杆",1],["废铁",3]], tool:"基础钳子", time:"0:30", unlock:"",
-   note:"烹饪用"},
-  {name:"烤盘", en:"Baking Tray", confirmed:true,
-   mats:[["混凝土浆",3]], tool:"重型切割工具", time:"0:30", unlock:"",
-   note:"陶瓷烤盘，烹饪用"},
+  {name:"圆锯片", en:"Circular Saw Blade", confirmed:true,
+   mats:[["铁锭",1],["剪刀",1]], tool:"重型锤子", time:"0:07", unlock:"",
+   note:"电动切割工具用；砂轮片原料"},
+  {name:"指南针", en:"Compass", confirmed:true,
+   mats:[["废铁",1],["钉子",1],["金属支架",1]], tool:"螺丝刀", time:"0:20", unlock:"",
+   note:"判断方向"},
+  {name:"重型枪钉", en:"Heavy Staples", confirmed:true,
+   mats:[["弹簧",5],["基础订书钉",2]], tool:"重型钳子", time:"0:06", unlock:"",
+   note:"重型钉枪用；框架枪钉包原料"},
   {name:"铸铁平底锅", en:"Cast Iron Pan", confirmed:true,
    mats:[["废铁",10],["金属支架",2]], tool:"重型钳子", time:"0:30", unlock:"",
    note:"烹饪用"},
-
-  // ---- 原材料（靠搜刮/拆解/冶炼，不可合成） ----
-  {name:"铁锭", en:"Iron Ingot", confirmed:true, mats:[["粗赤铁矿",5],["废铁",10]], tool:"熔炉", time:"0:06", unlock:"", note:"冶炼产出；高级铁锭/废金属板/废金属管原料"},
-  {name:"废橡胶", en:"Scrap Rubber", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮轮胎/橡胶制品；橡胶卷原料"},
-  {name:"珠宝废料", en:"Jewelry Scrap", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮旧首饰；水晶原料"},
-  {name:"粗石墨", en:"Raw Graphite", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，挖矿；石墨粉原料"},
-  {name:"玻璃板", en:"Glass Sheet", confirmed:true, mats:[["碎玻璃",30],["纯净硅砂",5]], tool:"熔炉", time:"0:30", unlock:"", note:"熔炼产出；窗户玻璃原料"},
-  {name:"电子废料", en:"Electronic Scrap", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，拆解电器；密码锁/遥控器/手持无线电要用"},
-  {name:"报纸", en:"Newspaper", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮；记事本原料"},
-  {name:"废纸", en:"Waste Paper", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮；记事本原料"},
-  {name:"灯泡", en:"Light Bulb", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮；手电筒原料；汽车拆卸：车灯，需螺丝刀+重型钳子"},
-  {name:"手机", en:"Phone", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮；GPS原料"},
-  {name:"废木料", en:"Scrap Wood", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，拆解家具；羊角锤原料"},
-  {name:"软皮革条", en:"Soft Leather Strip", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，打猎/搜刮；水袋原料"},
-  {name:"针线", en:"Needle and Thread", confirmed:true, mats:[["缝衣针",1],["线材",1]], tool:"", time:"0:04", unlock:"", note:"缝合伤口用；水袋原料"},
-  {name:"缝衣针", en:"Sewing Needle", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮；鱼钩原料"},
-  {name:"线材", en:"Wire", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，拆解电线；鱼线原料"},
-  {name:"玻璃碗", en:"Glass Bowl", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮；炖锅原料"},
-  {name:"植物脂肪", en:"Plant Fat", confirmed:true, mats:[["新鲜蔬菜",3],["水",1]], tool:"锅", time:"2:30", unlock:"", note:"饥饿恢复8%，烹饪2.0x；水150ml"},
-  {name:"木质长矛", en:"Wooden Spear", confirmed:false, mats:[], tool:"", time:"", unlock:"初期", note:"250 XP/个，材料易获取，具体进游戏看"},
-  // ---- 医药/生存 ----
+  {name:"钻头", en:"Drill Bit", confirmed:true,
+   mats:[["重型螺栓",1],["剪刀",1]], tool:"重型切割工具", time:"0:05", unlock:"",
+   note:"电钻专用"},
+  {name:"GPS", en:"GPS", confirmed:true,
+   mats:[["元件",2],["塑料外壳",1],["手机",1]],
+   tool:"焊接工具、基础钳子、螺丝刀", time:"0:45", unlock:"电气图纸 Lv.50",
+   note:"手持式GPS装置"},
   {name:"引火物", en:"Tinder", confirmed:true,
    mats:[["锯末",5],["废木料",1]], tool:"", time:"0:06", unlock:"",
    note:"生火用，延长燃烧时间"},
+  {name:"锯末", en:"Sawdust", confirmed:true,
+   mats:[["废木料",2]], tool:"基础切割工具", time:"0:04", unlock:"",
+   note:"引火物/废塑料/简易保温板要用"},
   {name:"血粉", en:"Blood Meal", confirmed:true,
-   mats:[["动物血液",1]], tool:"烤盘", time:"0:15", unlock:"求生 Lv.35",
-   note:"干燥血液粉末，肥料；截图显示液体材料行重复，待确认"},
-  {name:"骨粉", en:"Bone Meal", confirmed:true,
-   mats:[["骨头",2]], tool:"重型锤子", time:"0:15", unlock:"求生 Lv.35",
-   note:"磨碎骨头，肥料"},
-  {name:"创伤绷带", en:"Trauma Bandage", confirmed:true,
-   mats:[["加压绷带",3],["异丙醇",1],["胶带",1]], tool:"基础切割工具", time:"0:10", unlock:"",
-   note:"医院高级绷带，深层伤口止血"},
-  {name:"弹力绷带", en:"Elastic Bandage", confirmed:true,
-   mats:[["布绳",1],["简易绷带",1]], tool:"重型钳子", time:"0:06", unlock:"",
-   note:"基础绷带"},
-  {name:"加压绷带", en:"Pressure Bandage", confirmed:true,
-   mats:[["弹力绷带",2],["异丙醇",1]], tool:"基础切割工具", time:"0:07", unlock:"",
-   note:"医院高级绷带；创伤绷带原料"},
-  {name:"清洁湿巾", en:"Cleaning Wipes", confirmed:true,
-   mats:[["布绳",1],["异丙醇",1]], tool:"基础切割工具", time:"0:07", unlock:"",
-   note:"消毒伤口"},
-  {name:"简易夹板", en:"Splint", confirmed:true,
-   mats:[["木杆",1],["木板",1],["胶带",1]], tool:"基础订书机", time:"0:06", unlock:"",
-   note:"固定骨折；医用夹板原料"},
-  {name:"医用夹板", en:"Medical Splint", confirmed:true,
-   mats:[["简易夹板",2],["强化木杆",1]], tool:"基础切割工具", time:"0:10", unlock:"",
-   note:"治疗脚踝扭伤/骨折"},
-  {name:"血型检测包", en:"Blood Type Kit", confirmed:true,
-   mats:[["注射器",1],["塑料外壳",1]], tool:"重型钉枪", time:"0:25", unlock:"",
-   note:"检测血型"},
-  {name:"注射器", en:"Syringe", confirmed:true,
-   mats:[["缝衣针",1],["啤酒瓶",1]], tool:"基础切割工具", time:"0:10", unlock:"",
-   note:"装液体药物；血型检测包原料"},
-
-  // ---- 草药磨碎类（研钵和杵） ----
+   mats:[["动物血液250ml",1],["血液250ml",1]], tool:"烤盘", time:"0:15", unlock:"求生 Lv.35",
+   note:"干燥血液粉末，肥料；需动物血液+血液各250ml"},
   {name:"磨碎的毛蕊花", en:"Ground Mullein", confirmed:true,
    mats:[["毛蕊花",1]], tool:"研钵和杵", time:"0:05", unlock:"",
    note:"加工后植物"},
@@ -642,409 +560,86 @@ const PRESET = [
   {name:"磨碎的女巫帽菌", en:"Ground Witch Hat", confirmed:true,
    mats:[["女巫帽菌",1]], tool:"研钵和杵", time:"0:05", unlock:"",
    note:"加工后植物"},
-
-  // ---- 药膏类（研钵和杵） ----
   {name:"紫草药膏", en:"Comfrey Salve", confirmed:true,
-   mats:[["紫草",5],["水",1]], tool:"研钵和杵", time:"0:05", unlock:"",
+   mats:[["紫草",5],["水25ml",1]], tool:"研钵和杵", time:"0:05", unlock:"",
    note:"水25ml"},
   {name:"野蒜药膏", en:"Garlic Salve", confirmed:true,
-   mats:[["野蒜",5],["水",1]], tool:"研钵和杵", time:"0:05", unlock:"",
+   mats:[["野蒜",5],["水25ml",1]], tool:"研钵和杵", time:"0:05", unlock:"",
    note:"水25ml"},
   {name:"野姜药膏", en:"Wild Ginger Salve", confirmed:true,
-   mats:[["野姜",5],["水",1]], tool:"研钵和杵", time:"0:05", unlock:"",
+   mats:[["野姜",5],["水25ml",1]], tool:"研钵和杵", time:"0:05", unlock:"",
    note:"水25ml"},
   {name:"著草药膏", en:"Yarrow Salve", confirmed:true,
-   mats:[["著草",5],["水",1]], tool:"研钵和杵", time:"0:05", unlock:"",
+   mats:[["著草",5],["水25ml",1]], tool:"研钵和杵", time:"0:05", unlock:"",
    note:"水25ml"},
-
-
-  // ---- 烹饪食谱 ----
-  {name:"白松露和牛", en:"Wagyu with White Truffle", confirmed:true,
-   mats:[["和牛",1],["白松露",1],["黑蒜",1],["高档玫瑰盐",1],["食用油",1]], tool:"平底锅", time:"6:00", unlock:"",
-   note:"饥饿恢复38%；力量2.0x 活力2.0x；食用油250ml"},
-  {name:"贝果", en:"Bagel", confirmed:true,
-   mats:[["袋装糖",1],["袋装面粉",1],["袋装酵母粉",1],["水",1]], tool:"锅", time:"4:10", unlock:"",
-   note:"饥饿恢复12%；水250ml"},
-  {name:"布朗尼", en:"Brownie", confirmed:true,
-   mats:[["袋装糖",1],["高档巧克力",1],["袋装面粉",1]], tool:"烤盘", time:"7:30", unlock:"",
-   note:"饥饿恢复3%；巧克力分牛奶/果仁/黑三种变体"},
-  {name:"炒饭", en:"Fried Rice", confirmed:true,
-   mats:[["糙米",1],["食用油",1]], tool:"平底锅", time:"2:00", unlock:"",
-   note:"饥饿恢复27%；食用油250ml"},
-  {name:"炒时蔬", en:"Stir-fried Veggies", confirmed:true,
-   mats:[["卷心菜",1],["胡萝卜",1],["食用油",1]], tool:"平底锅", time:"4:10", unlock:"",
-   note:"饥饿恢复38%；求生2.0x；变体：卷心菜+洋葱/洋葱+胡萝卜"},
-  {name:"炒洋葱", en:"Sauteed Onions", confirmed:true,
-   mats:[["洋葱",1],["食用油",1]], tool:"平底锅", time:"2:00", unlock:"",
-   note:"饥饿恢复6%；食用油250ml"},
-  {name:"橙子果酱", en:"Orange Jam", confirmed:true,
-   mats:[["橙子",1],["袋装糖",1],["水",1]], tool:"锅", time:"5:00", unlock:"",
-   note:"饥饿恢复6%；社交2.0x 交易2.0x；水250ml"},
-  {name:"蛋花汤", en:"Egg Drop Soup", confirmed:true,
-   mats:[["鸡蛋",1],["肉汤",1]], tool:"锅", time:"0:45", unlock:"",
-   note:"饥饿恢复30%；活力2.0x；肉汤250ml"},
-  {name:"炖牛肉(烤盘)", en:"Beef Stew (Roasting)", confirmed:true,
-   mats:[["牛肉",1],["胡萝卜",1],["洋葱",1],["肉汤",1]], tool:"烤盘", time:"6:40", unlock:"",
-   note:"饥饿恢复90%；建造2.0x 制作2.0x；肉汤250ml"},
-  {name:"炖牛肉(锅)", en:"Beef Stew (Pot)", confirmed:true,
-   mats:[["牛肉",1],["土豆",1],["胡萝卜",1],["肉汤",1]], tool:"锅", time:"3:20", unlock:"",
-   note:"饥饿恢复45%；活力2.0x；肉汤250ml"},
-  {name:"鹅肝天妇罗", en:"Foie Gras Tempura", confirmed:true,
-   mats:[["肥肝",1],["酥皮",1],["高档玫瑰盐",1],["黑蒜",1],["食用油",1]], tool:"平底锅", time:"6:00", unlock:"",
-   note:"饥饿恢复38%；力量2.0x 活力2.0x；食用油250ml"},
-  {name:"法棍面包", en:"Baguette", confirmed:true,
-   mats:[["袋装盐",1],["袋装面粉",1],["袋装酵母粉",1],["水",1]], tool:"烤盘", time:"7:30", unlock:"",
-   note:"饥饿恢复24%；水250ml"},
-  {name:"法式冷汤", en:"French Vichyssoise", confirmed:true,
-   mats:[["土豆",1],["洋葱",1],["牛奶",1]], tool:"锅", time:"5:00", unlock:"",
-   note:"饥饿恢复38%；机械2.0x 维修2.0x；牛奶250ml"},
-  {name:"法式咸派", en:"Quiche", confirmed:true,
-   mats:[["鸡蛋",1],["奶酪",1],["牛奶",1]], tool:"烤盘", time:"8:20", unlock:"",
-   note:"饥饿恢复26%；力量2.0x 活力2.0x；牛奶250ml"},
-  {name:"番茄汤", en:"Tomato Soup", confirmed:true,
-   mats:[["番茄",1],["肉汤",1]], tool:"锅", time:"2:00", unlock:"",
-   note:"饥饿恢复15%；机械2.0x；变体：番茄片×2+肉汤250ml"},
-  {name:"罐装汤", en:"Canned Soup", confirmed:true,
-   mats:[["罐装汤(罐头)",1]], tool:"锅", time:"1:40", unlock:"",
-   note:"饥饿恢复21%；只是加热已有罐头"},
-  {name:"海鲜浓汤", en:"Seafood Chowder", confirmed:true,
-   mats:[["盒装鱼",1],["土豆",1]], tool:"锅", time:"3:20", unlock:"",
-   note:"饥饿恢复26%；活力2.0x；6种变体：盒装鱼/金枪鱼罐头/鲱鱼罐头+土豆或洋葱，部分加肉汤250ml"},
-  {name:"红接骨木果酱", en:"Elderberry Jam", confirmed:true,
-   mats:[["红接骨木果",3],["袋装糖",1]], tool:"锅", time:"5:00", unlock:"",
-   note:"饥饿恢复15%"},
-  {name:"胡萝卜汤", en:"Carrot Soup", confirmed:true,
-   mats:[["胡萝卜",1],["肉汤",1]], tool:"锅", time:"2:00", unlock:"",
-   note:"饥饿恢复22%；机械2.0x；变体：胡萝卜片×2+肉汤250ml"},
-  {name:"华夫饼", en:"Waffles", confirmed:true,
-   mats:[["盒装华夫饼",1]], tool:"平底锅", time:"0:15", unlock:"",
-   note:"饥饿恢复9%"},
-  {name:"黄油玉米", en:"Buttered Corn", confirmed:true,
-   mats:[["黄油",1],["玉米",1]], tool:"平底锅", time:"0:50", unlock:"",
-   note:"饥饿恢复9%"},
-  {name:"惠灵顿牛排", en:"Beef Wellington", confirmed:true,
-   mats:[["和牛",1],["酥皮",1],["高档玫瑰盐",1],["黑蒜",1],["食用油",1]], tool:"平底锅", time:"6:00", unlock:"",
-   note:"饥饿恢复38%；力量2.0x 活力2.0x；食用油250ml"},
-  {name:"家常芝士通心粉", en:"Mac and Cheese", confirmed:true,
-   mats:[["有机奶酪通心粉",1],["奶酪",1],["黄油",1],["牛奶",1]], tool:"烤盘", time:"5:50", unlock:"",
-   note:"饥饿恢复26%；搜刮2.0x；牛奶250ml"},
-  {name:"煎蛋", en:"Fried Egg", confirmed:true,
-   mats:[["鸡蛋",1],["食用油",1]], tool:"平底锅", time:"0:15", unlock:"",
-   note:"饥饿恢复30%；食用油250ml"},
-  {name:"煎蛋卷", en:"Omelette", confirmed:true,
-   mats:[["鸡蛋",1],["洋蓟",1],["食用油",1]], tool:"平底锅", time:"0:35", unlock:"",
-   note:"饥饿恢复45%；电工2.0x 求生2.0x；6种变体：洋蓟/牛油果/西兰花/洋葱/番茄/奶酪"},
-  {name:"金箔龙虾排", en:"Gold Leaf Lobster", confirmed:true,
-   mats:[["龙虾",1],["可食用金箔",1],["高档玫瑰盐",1],["藏红花",1],["水",1]], tool:"平底锅", time:"6:00", unlock:"",
-   note:"饥饿恢复38%；力量2.0x 活力2.0x；水250ml"},
-  {name:"法式蜗牛", en:"Escargots", confirmed:true,
-   mats:[["食用蜗牛",1],["黑蒜",1],["高档玫瑰盐",1],["食用油",1]], tool:"平底锅", time:"6:00", unlock:"",
-   note:"饥饿恢复38%；力量2.0x 活力2.0x；食用油250ml"},
-  {name:"烤土豆", en:"Baked Potato", confirmed:true,
-   mats:[["土豆",1],["黄油",1]], tool:"烤盘", time:"1:00", unlock:"",
-   note:"饥饿恢复15%"},
-  {name:"烤鱼", en:"Baked Fish", confirmed:true,
-   mats:[["鱼",1]], tool:"平底锅/锅/烤盘", time:"2:00", unlock:"",
-   note:"饥饿恢复105%"},
-  {name:"烤玉米", en:"Roasted Corn", confirmed:true,
-   mats:[["玉米",1]], tool:"平底锅", time:"0:50", unlock:"",
-   note:"饥饿恢复9%"},
-  {name:"玛芬蛋糕", en:"Muffin", confirmed:true,
-   mats:[["黄油",1],["袋装面粉",1],["袋装糖",1],["牛奶",1]], tool:"烤盘", time:"7:30", unlock:"",
-   note:"饥饿恢复6%；牛奶250ml"},
-  {name:"麦卢卡蛋白酥", en:"Manuka Meringue", confirmed:true,
-   mats:[["鸭蛋",1],["酥皮",1],["麦卢卡蜂蜜",1]], tool:"平底锅", time:"6:00", unlock:"",
-   note:"饥饿恢复38%；力量2.0x 活力2.0x"},
-  {name:"馒头热狗", en:"Hot Dog Bun", confirmed:true,
-   mats:[["热狗",1],["热狗面包",1],["袋装盐",1],["水",1]], tool:"平底锅", time:"0:20", unlock:"",
-   note:"饥饿恢复38%；建造2.0x 制作2.0x；水250ml"},
-  {name:"毛血旺", en:"Spicy Blood Stew", confirmed:true,
-   mats:[["鸡肉面",1],["动物血液",1]], tool:"锅", time:"2:00", unlock:"",
-   note:"饥饿恢复75%；活力2.0x；变体：番茄片×2+肉汤250ml；动物血液250ml"},
-  {name:"美味牛肝菌汤", en:"Porcini Soup", confirmed:true,
-   mats:[["磨碎的美味牛肝菌",5],["水",1]], tool:"锅", time:"2:00", unlock:"",
-   note:"饥饿恢复60%；变体：胡萝卜片×2+肉汤250ml；水250ml"},
-  {name:"米饭", en:"Cooked Rice", confirmed:true,
-   mats:[["糙米",1],["水",1]], tool:"锅", time:"0:37", unlock:"",
-   note:"饥饿恢复27%；水250ml"},
-  {name:"密歇根肉酱", en:"Michigan Chili", confirmed:true,
-   mats:[["大蒜",1],["番茄罐头",1],["牛肉",1],["辣椒酱",1]], tool:"锅", time:"0:20", unlock:"",
-   note:"饥饿恢复38%；建造2.0x 制作2.0x 机械2.0x；辣椒酱250ml"},
-  {name:"密歇根肉酱热狗", en:"Michigan Hot Dog", confirmed:true,
-   mats:[["密歇根肉酱",1],["馒头热狗",1],["洋葱",1]], tool:"平底锅", time:"0:20", unlock:"",
-   note:"饥饿恢复38%；建造/制作/电工/机械/维修各2.0x"},
-  {name:"面包", en:"Bread", confirmed:true,
-   mats:[["袋装糖",1],["袋装面粉",1],["袋装酵母粉",1],["水",1]], tool:"烤盘", time:"7:30", unlock:"",
-   note:"饥饿恢复30%；水250ml"},
-  {name:"墨西哥鸡肉薄饼", en:"Chicken Quesadilla", confirmed:true,
-   mats:[["盒装玉米饼",1],["奶酪",1],["鸡肉",1],["食用油",1]], tool:"平底锅", time:"0:20", unlock:"",
-   note:"饥饿恢复30%；驾驶2.0x；食用油250ml"},
-  {name:"墨西哥鸡肉卷", en:"Chicken Burrito", confirmed:true,
-   mats:[["墨西哥鸡肉卷食材包",1],["鸡肉",1],["盒装玉米饼",1]], tool:"平底锅", time:"1:40", unlock:"",
-   note:"饥饿恢复30%；驾驶2.0x"},
-  {name:"墨西哥烤肉卷", en:"Carne Asada Burrito", confirmed:true,
-   mats:[["墨西哥烤肉卷食材包",1],["牛肉",1],["盒装玉米饼",1]], tool:"平底锅", time:"1:40", unlock:"",
-   note:"饥饿恢复30%；驾驶2.0x"},
-  {name:"墨西哥牛肉薄饼", en:"Beef Quesadilla", confirmed:true,
-   mats:[["盒装玉米饼",1],["奶酪",1],["牛肉",1],["食用油",1]], tool:"平底锅", time:"0:20", unlock:"",
-   note:"饥饿恢复30%；驾驶2.0x；食用油250ml"},
-  {name:"奶油焗土豆", en:"Scalloped Potatoes", confirmed:true,
-   mats:[["土豆",1],["奶酪",1],["洋葱",1],["牛奶",1]], tool:"烤盘", time:"6:40", unlock:"",
-   note:"饥饿恢复45%；力量2.0x 活力2.0x；牛奶250ml"},
-  {name:"奶油培根意面", en:"Fettuccine Alfredo", confirmed:true,
-   mats:[["意面",1],["猪肉",1],["芝士火锅",1],["牛奶",1]], tool:"锅", time:"5:00", unlock:"",
-   note:"饥饿恢复38%；力量2.0x 活力2.0x；牛奶250ml"},
-  {name:"奶油玉米汤", en:"Creamed Corn Soup", confirmed:true,
-   mats:[["玉米",1],["肉汤",1]], tool:"锅", time:"2:00", unlock:"",
-   note:"饥饿恢复22%；机械2.0x；变体：玉米罐头×1+肉汤250ml"},
-  {name:"南瓜汤", en:"Pumpkin Soup", confirmed:true,
-   mats:[["南瓜",1],["肉汤",1]], tool:"锅", time:"2:00", unlock:"",
-   note:"饥饿恢复30%；机械2.0x；肉汤250ml"},
-  {name:"酿番茄", en:"Stuffed Tomato", confirmed:true,
-   mats:[["番茄",1],["奶酪",1],["水",1]], tool:"锅", time:"0:50", unlock:"",
-   note:"饥饿恢复4%；水250ml"},
-  {name:"牛角面包", en:"Croissant", confirmed:true,
-   mats:[["黄油",1],["袋装面粉",1],["袋装酵母粉",1],["牛奶",1]], tool:"烤盘", time:"7:30", unlock:"",
-   note:"饥饿恢复4%；牛奶250ml"},
-  {name:"牛肉玉米卷饼", en:"Beef Taco", confirmed:true,
-   mats:[["玉米卷饼食材包",1],["牛肉",1],["盒装玉米饼",1]], tool:"平底锅", time:"1:40", unlock:"",
-   note:"饥饿恢复45%；驾驶2.0x"},
-  {name:"帕玛森奶酪鸡排", en:"Chicken Parmesan", confirmed:true,
-   mats:[["鸡肉",1],["奶酪",1],["番茄罐头",1]], tool:"烤盘", time:"5:00", unlock:"",
-   note:"饥饿恢复75%；建造2.0x 制作2.0x；变体：番茄×1"},
-  {name:"巧克力蛋糕", en:"Chocolate Cake", confirmed:true,
-   mats:[["鸡蛋",1],["高档牛奶巧克力",1],["袋装面粉",1],["牛奶",1]], tool:"烤盘", time:"8:20", unlock:"",
-   note:"饥饿恢复30%；3种巧克力变体；牛奶250ml"},
-  {name:"巧克力火锅", en:"Chocolate Fondue", confirmed:true,
-   mats:[["高档牛奶巧克力",1],["颗粒花生酱",1],["袋装盐",1],["牛奶",1]], tool:"锅", time:"5:50", unlock:"",
-   note:"饥饿恢复22%；烹饪2.0x；牛奶250ml"},
-  {name:"巧克力曲奇", en:"Chocolate Chip Cookie", confirmed:true,
-   mats:[["袋装糖",1],["高档牛奶巧克力",1],["袋装面粉",1],["食用油",1]], tool:"烤盘", time:"7:30", unlock:"",
-   note:"饥饿恢复3%；3种巧克力变体；食用油250ml"},
-  {name:"巧克力甜甜圈", en:"Chocolate Donut", confirmed:true,
-   mats:[["袋装糖",1],["高档牛奶巧克力",1],["袋装面粉",1],["食用油",1]], tool:"锅", time:"0:50", unlock:"",
-   note:"饥饿恢复3%；3种巧克力变体；食用油250ml"},
-  {name:"清洁剂乱炖", en:"Cleaner Stew", confirmed:true,
-   mats:[["洗手液",1]], tool:"锅", time:"2:30", unlock:"",
-   note:"饥饿恢复15%；活力2.0x"},
-  {name:"砂锅鸡肉", en:"Casserole Chicken", confirmed:true,
-   mats:[["鸡肉",1],["胡萝卜",1],["西兰花",1]], tool:"烤盘", time:"6:40", unlock:"",
-   note:"饥饿恢复75%；建造2.0x 制作2.0x；变体：奶酪×1+西兰花×1"},
-  {name:"什锦饭", en:"Jambalaya", confirmed:true,
-   mats:[["烟熏香肠",1],["糙米",1],["洋葱",1],["肉汤",1]], tool:"锅", time:"5:50", unlock:"",
-   note:"饥饿恢复75%；建造2.0x 制作2.0x；肉汤250ml"},
-  {name:"什锦肉串", en:"Kebab", confirmed:true,
-   mats:[["茄子",1],["牛肉",1],["大蒜",1],["食用油",1]], tool:"平底锅", time:"4:10", unlock:"",
-   note:"饥饿恢复38%；力量2.0x 活力2.0x；食用油250ml"},
-  {name:"水煮鸡蛋", en:"Boiled Egg", confirmed:true,
-   mats:[["鸡蛋",1],["水",1]], tool:"锅", time:"1:15", unlock:"",
-   note:"饥饿恢复30%；水250ml"},
-  {name:"水煮卷心菜", en:"Boiled Cabbage", confirmed:true,
-   mats:[["卷心菜",1],["水",1]], tool:"锅", time:"2:30", unlock:"",
-   note:"饥饿恢复48%；水250ml"},
-  {name:"水煮南瓜", en:"Boiled Pumpkin", confirmed:true,
-   mats:[["南瓜",1],["水",1]], tool:"锅", time:"2:30", unlock:"",
-   note:"饥饿恢复60%；水250ml"},
-  {name:"水煮热狗", en:"Boiled Hot Dog", confirmed:true,
-   mats:[["热狗",1],["水",1]], tool:"锅", time:"1:50", unlock:"",
-   note:"饥饿恢复45%；变体：啤酒250ml；水250ml"},
-  {name:"水煮西兰花", en:"Boiled Broccoli", confirmed:true,
-   mats:[["西兰花",1],["水",1]], tool:"锅", time:"2:30", unlock:"",
-   note:"饥饿恢复15%；水250ml"},
-  {name:"水煮玉米", en:"Boiled Corn", confirmed:true,
-   mats:[["玉米",1],["水",1]], tool:"锅", time:"1:40", unlock:"",
-   note:"饥饿恢复9%；水250ml"},
-  {name:"炭烤番茄", en:"Roasted Tomato", confirmed:true,
-   mats:[["番茄",1]], tool:"平底锅", time:"0:50", unlock:"",
-   note:"饥饿恢复4%"},
-  {name:"炭烤花生果酱三明治", en:"PB&J Sandwich", confirmed:true,
-   mats:[["面包片",1],["颗粒花生酱",1],["草莓酱",1]], tool:"平底锅", time:"0:15", unlock:"",
-   note:"饥饿恢复15%；驾驶2.0x；变体：橙子果酱×1"},
-  {name:"炭烤南瓜", en:"Roasted Pumpkin", confirmed:true,
-   mats:[["南瓜",1]], tool:"平底锅", time:"0:50", unlock:"",
-   note:"饥饿恢复60%"},
-  {name:"炭烤芝士三明治", en:"Grilled Cheese", confirmed:true,
-   mats:[["面包片",1],["奶酪",1],["黄油",1],["食用油",1]], tool:"平底锅", time:"0:15", unlock:"",
-   note:"饥饿恢复22%；驾驶2.0x；食用油250ml"},
-  {name:"土豆汤", en:"Potato Soup", confirmed:true,
-   mats:[["土豆",1],["牛奶",1]], tool:"锅", time:"2:00", unlock:"",
-   note:"饥饿恢复22%；机械2.0x；牛奶250ml"},
-  {name:"西葫芦汤", en:"Zucchini Soup", confirmed:true,
-   mats:[["西葫芦",1],["肉汤",1]], tool:"锅", time:"2:00", unlock:"",
-   note:"饥饿恢复30%；机械2.0x；变体：半个西葫芦×2+肉汤250ml"},
-  {name:"香煎肉排", en:"Pan-seared Steak", confirmed:true,
-   mats:[["可香煎肉类",1]], tool:"平底锅", time:"2:05", unlock:"",
-   note:"饥饿恢复45%"},
-  {name:"香辣炒蛋", en:"Spicy Scrambled Eggs", confirmed:true,
-   mats:[["鸡蛋",1],["袋装盐",1],["辣椒酱",1]], tool:"平底锅", time:"0:25", unlock:"",
-   note:"饥饿恢复30%；电工2.0x 求生2.0x；辣椒酱250ml"},
-  {name:"新奥尔良烤生蚝", en:"Oysters Rockefeller", confirmed:true,
-   mats:[["牡蛎",1],["陈年奶酪",1],["黑蒜",1],["水",1]], tool:"平底锅", time:"6:00", unlock:"",
-   note:"饥饿恢复38%；力量2.0x 活力2.0x；水250ml"},
-  {name:"鸭蛋奶冻", en:"Duck Egg Panna Cotta", confirmed:true,
-   mats:[["鸭蛋",1],["麦卢卡蜂蜜",1],["马达加斯加香草精",1]], tool:"平底锅", time:"6:00", unlock:"",
-   note:"饥饿恢复38%；力量2.0x 活力2.0x"},
-  {name:"洋葱汤", en:"French Onion Soup", confirmed:true,
-   mats:[["洋葱",1],["肉汤",1]], tool:"锅", time:"2:00", unlock:"",
-   note:"饥饿恢复22%；机械2.0x；变体：半个洋葱×2+肉汤250ml"},
-  {name:"野生黑莓果酱", en:"Blackberry Jam", confirmed:true,
-   mats:[["野生黑莓",3],["袋装糖",1]], tool:"锅", time:"5:00", unlock:"",
-   note:"饥饿恢复15%"},
-  {name:"意式烩饭", en:"Risotto", confirmed:true,
-   mats:[["糙米",1],["黄油",1],["肉汤",1]], tool:"锅/平底锅/烤盘", time:"2:55", unlock:"",
-   note:"饥饿恢复56%；搜刮2.0x；肉汤250ml"},
-  {name:"犹太土豆饼", en:"Latkes", confirmed:true,
-   mats:[["土豆",1],["袋装面粉",1],["食用油",1]], tool:"平底锅", time:"2:00", unlock:"",
-   note:"饥饿恢复30%；电工2.0x 求生2.0x；食用油250ml"},
-  {name:"鱼子酱扇贝", en:"Scallops with Caviar", confirmed:true,
-   mats:[["扇贝",1],["鱼子酱",1],["黑蒜",1],["高档玫瑰盐",1],["食用油",1]], tool:"平底锅", time:"6:00", unlock:"",
-   note:"饥饿恢复38%；力量2.0x 活力2.0x；食用油250ml"},
-  {name:"炸肉", en:"Fried Meat", confirmed:true,
-   mats:[["可油炸肉类",1],["食用油",1]], tool:"平底锅", time:"0:30", unlock:"",
-   note:"饥饿恢复45%；食用油250ml"},
-  {name:"炸鱼", en:"Fried Fish", confirmed:true,
-   mats:[["鱼",1],["食用油",1]], tool:"平底锅", time:"0:30", unlock:"",
-   note:"饥饿恢复105%；食用油250ml"},
-  {name:"章鱼小丸子", en:"Takoyaki", confirmed:true,
-   mats:[["章鱼切片",1],["鲣鱼片",1],["日式蛋黄酱",1],["干海藻",1],["水",1]], tool:"平底锅", time:"6:00", unlock:"",
-   note:"饥饿恢复38%；力量2.0x 活力2.0x；水250ml"},
-  {name:"榛果焦糖煎牛排", en:"Hazelnut Caramel Steak", confirmed:true,
-   mats:[["牛肉",1],["黄油",1],["榛果",1],["食用油",1]], tool:"平底锅", time:"4:10", unlock:"",
-   note:"饥饿恢复38%；力量2.0x 活力2.0x；食用油250ml"},
-  {name:"芝士火锅", en:"Cheese Fondue", confirmed:true,
-   mats:[["奶酪",1],["番茄",1],["土豆",1],["葡萄酒",1]], tool:"锅", time:"5:50", unlock:"",
-   note:"饥饿恢复22%；烹饪2.0x；葡萄酒250ml"},
-  {name:"芝士披萨", en:"Cheese Pizza", confirmed:true,
-   mats:[["番茄",1],["奶酪",1],["袋装面粉",1],["食用油",1]], tool:"平底锅", time:"10:50", unlock:"",
-   note:"饥饿恢复180%；食用油250ml"},
-  {name:"芝士通心粉", en:"Cheese Macaroni", confirmed:true,
-   mats:[["有机奶酪通心粉",1],["水",1]], tool:"锅", time:"0:45", unlock:"",
-   note:"饥饿恢复21%；水250ml"},
-  {name:"煮熟的鲱鱼罐头", en:"Cooked Herring", confirmed:true,
-   mats:[["鲱鱼罐头",1]], tool:"平底锅", time:"1:40", unlock:"",
-   note:"饥饿恢复30%"},
-  {name:"煮熟的枫糖燕麦粥", en:"Maple Oatmeal", confirmed:true,
-   mats:[["枫糖燕麦片",1],["水",1]], tool:"锅", time:"0:45", unlock:"",
-   note:"饥饿恢复45%；水250ml"},
-  {name:"煮熟的金枪鱼罐头", en:"Cooked Tuna", confirmed:true,
-   mats:[["金枪鱼罐头",1]], tool:"平底锅", time:"1:40", unlock:"",
-   note:"饥饿恢复30%"},
-  {name:"煮熟的冷冻薯条", en:"Cooked Fries", confirmed:true,
-   mats:[["袋装薯条",1]], tool:"烤盘", time:"8:20", unlock:"",
-   note:"饥饿恢复15%"},
-  {name:"煮熟的苹果燕麦粥", en:"Apple Oatmeal", confirmed:true,
-   mats:[["苹果燕麦片",1],["水",1]], tool:"锅", time:"0:45", unlock:"",
-   note:"饥饿恢复45%；水250ml"},
-  {name:"煮熟的豌豆罐头", en:"Cooked Peas", confirmed:true,
-   mats:[["豌豆罐头",1]], tool:"锅", time:"0:20", unlock:"",
-   note:"饥饿恢复21%"},
-  {name:"煮熟的意面", en:"Cooked Pasta", confirmed:true,
-   mats:[["意面",1],["水",1]], tool:"锅", time:"0:45", unlock:"",
-   note:"饥饿恢复18%；水250ml"},
-  {name:"煮熟的玉米罐头", en:"Cooked Corn", confirmed:true,
-   mats:[["玉米罐头",1]], tool:"锅", time:"0:20", unlock:"",
-   note:"饥饿恢复9%"},
-  {name:"煮熟的原味燕麦粥", en:"Plain Oatmeal", confirmed:true,
-   mats:[["原味燕麦片",1],["水",1]], tool:"锅", time:"0:45", unlock:"",
-   note:"饥饿恢复45%；水250ml"},
-  {name:"抓饭", en:"Pilaf", confirmed:true,
-   mats:[["糙米",1],["大蒜",1],["洋葱",1],["肉汤",1]], tool:"锅/平底锅/烤盘", time:"2:55", unlock:"",
-   note:"饥饿恢复52%；敏捷2.0x；肉汤250ml"},
-
-
-  // ---- 武器/武器配件 ----
-  {name:"木矛", en:"Wooden Spear", confirmed:true,
-   mats:[["木杆",1]], tool:"基础切割工具", time:"0:30", unlock:"",
-   note:"各种改装木矛的基础件"},
-  {name:"带图钉的木矛", en:"Spear with Thumbtack", confirmed:true,
-   mats:[["木矛",1],["胶带",1],["图钉",1]], tool:"", time:"0:30", unlock:"", note:""},
-  {name:"带勺子的木矛", en:"Spear with Spoon", confirmed:true,
-   mats:[["木矛",1],["胶带",1],["勺子",1]], tool:"", time:"0:30", unlock:"", note:"远程喂汤"},
-  {name:"带螺丝刀的木矛", en:"Spear with Screwdriver", confirmed:true,
-   mats:[["木矛",1],["胶带",1],["十字螺丝刀",1]], tool:"", time:"0:30", unlock:"",
-   note:"变体：一字螺丝刀×1"},
-  {name:"带黄油刀的木矛", en:"Spear with Butter Knife", confirmed:true,
-   mats:[["木矛",1],["胶带",1],["黄油刀",1]], tool:"", time:"0:30", unlock:"", note:""},
-  {name:"带格斗刀的木矛", en:"Spear with Combat Knife", confirmed:true,
-   mats:[["木矛",1],["胶带",1],["格斗刀",1]], tool:"", time:"0:30", unlock:"", note:"制作100/55"},
-  {name:"带叉子的木矛", en:"Spear with Fork", confirmed:true,
-   mats:[["木矛",1],["胶带",1],["叉子",1]], tool:"", time:"0:30", unlock:"", note:"远程喂食"},
-  {name:"带小刀的木矛", en:"Spear with Bread Knife", confirmed:true,
-   mats:[["木矛",1],["胶带",1],["面包刀",1]], tool:"", time:"0:30", unlock:"", note:"远程切菜"},
-  {name:"带砍刀的木矛", en:"Spear with Machete", confirmed:true,
-   mats:[["木矛",1],["胶带",1],["砍刀",1]], tool:"", time:"0:30", unlock:"", note:"制作100/65"},
-  {name:"带剪刀的木矛", en:"Spear with Scissors", confirmed:true,
-   mats:[["木矛",1],["胶带",1],["剪刀",1]], tool:"", time:"0:30", unlock:"", note:""},
-  {name:"火药", en:"Gunpowder", confirmed:true,
-   mats:[["硫磺",3]], tool:"", time:"0:05", unlock:"", note:"制作物品用"},
-  {name:"铁箭", en:"Iron Arrow", confirmed:true,
-   mats:[["木杆",1],["废铁",1]], tool:"", time:"0:04", unlock:"", note:""},
-  {name:"改良铁箭", en:"Improved Iron Arrow", confirmed:true,
-   mats:[["铁箭",1],["羽毛",1],["线材",1]], tool:"", time:"0:04", unlock:"", note:""},
-  {name:"弓", en:"Bow", confirmed:true,
-   mats:[["废木料",3],["线材",1],["胶带",1]], tool:"", time:"0:10", unlock:"", note:""},
-  {name:"碎瓶子", en:"Broken Bottle", confirmed:true,
-   mats:[["啤酒瓶",1]], tool:"", time:"0:04", unlock:"",
-   note:"5种变体：啤酒瓶/伏特加/葡萄酒/威士忌/金酒各×1"},
-  {name:"利齿剑", en:"Spiked Sword", confirmed:true,
-   mats:[["强化金属支架",3],["割草机刀片",1],["羊角锤",1]], tool:"重型锤子/工业级焊机", time:"3:30", unlock:"",
-   note:"制作100/95"},
-  {name:"工兵铲", en:"Entrenching Tool", confirmed:true,
-   mats:[["铲子",1],["胶带",3]], tool:"电动切割工具/基础焊机", time:"3:00", unlock:"",
-   note:"制作100/75"},
-  {name:"手(雷)", en:"Hand Grenade", confirmed:true,
-   mats:[["断臂",1],["破片手雷",1]], tool:"锤子", time:"0:10", unlock:"",
-   note:"绑着丧尸残肢的破片手雷，传病毒"},
-  {name:"钉头锤", en:"Nail Club", confirmed:true,
-   mats:[["棒球棍",1],["太阳模型",1],["剪刀",3],["胶水",1]], tool:"锤子", time:"3:30", unlock:"",
-   note:"胶水50ml；制作100/95"},
-  {name:"钉刺棒球棍", en:"Nail Baseball Bat", confirmed:true,
-   mats:[["棒球棍",1],["钉子",5]], tool:"锤子", time:"0:30", unlock:"", note:""},
-  {name:"钉刺木板", en:"Nail Plank", confirmed:true,
-   mats:[["木板",1],["钉子",5]], tool:"锤子", time:"0:30", unlock:"", note:""},
-  {name:"钉刺木桨", en:"Nail Oar", confirmed:true,
-   mats:[["木桨",1],["钉子",5]], tool:"锤子", time:"0:30", unlock:"", note:""},
-
-
-  // ---- 饮品/液体 ----
-  {name:"食用油", en:"Cooking Oil", confirmed:true,
-   mats:[["植物脂肪",2],["水",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
-   note:"由植物脂肪提炼；水250ml"},
+  {name:"骨粉", en:"Bone Meal", confirmed:true,
+   mats:[["骨头",2]], tool:"重型锤子", time:"0:15", unlock:"求生 Lv.35",
+   note:"磨碎骨头，肥料"},
+  {name:"创伤绷带", en:"Trauma Bandage", confirmed:true,
+   mats:[["加压绷带",3],["异丙醇",1],["胶带",1]], tool:"基础切割工具", time:"0:10", unlock:"",
+   note:"医院高级绷带，深层伤口止血"},
+  {name:"弹力绷带", en:"Elastic Bandage", confirmed:true,
+   mats:[["布绳",1],["简易绷带",1]], tool:"重型钳子", time:"0:06", unlock:"",
+   note:"基础绷带"},
+  {name:"加压绷带", en:"Pressure Bandage", confirmed:true,
+   mats:[["弹力绷带",2],["异丙醇",1]], tool:"基础切割工具", time:"0:07", unlock:"",
+   note:"医院高级绷带；创伤绷带原料"},
+  {name:"简易绷带", en:"Makeshift Bandage", confirmed:true,
+   mats:[["废布料",2],["布绳",2]], tool:"", time:"0:05", unlock:"初期",
+   note:"自制绷带；弹力绷带原料"},
+  {name:"简易夹板", en:"Splint", confirmed:true,
+   mats:[["木杆",1],["木板",1],["胶带",1]], tool:"基础订书机", time:"0:06", unlock:"",
+   note:"固定骨折；医用夹板原料"},
+  {name:"清洁湿巾", en:"Cleaning Wipes", confirmed:true,
+   mats:[["布绳",1],["异丙醇",1]], tool:"基础切割工具", time:"0:07", unlock:"",
+   note:"消毒伤口"},
+  {name:"血型检测包", en:"Blood Type Kit", confirmed:true,
+   mats:[["注射器",1],["塑料外壳",1]], tool:"重型钉枪", time:"0:25", unlock:"",
+   note:"检测血型"},
+  {name:"医用夹板", en:"Medical Splint", confirmed:true,
+   mats:[["简易夹板",2],["强化木杆",1]], tool:"基础切割工具", time:"0:10", unlock:"",
+   note:"治疗脚踝扭伤/骨折"},
+  {name:"针线", en:"Needle and Thread", confirmed:true, mats:[["缝衣针",1],["线材",1]], tool:"", time:"0:04", unlock:"", note:"缝合伤口用；水袋原料"},
+  {name:"注射器", en:"Syringe", confirmed:true,
+   mats:[["缝衣针",1],["啤酒瓶",1]], tool:"基础切割工具", time:"0:10", unlock:"",
+   note:"装液体药物；血型检测包原料"},
   {name:"开水", en:"Boiled Water", confirmed:true,
-   mats:[["水",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
+   mats:[["水250ml",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
    note:"净化饮用水；水250ml"},
   {name:"肉汤", en:"Broth", confirmed:true,
-   mats:[["植物脂肪",1],["新鲜蔬菜",5],["水",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
+   mats:[["植物脂肪",1],["新鲜蔬菜",5],["水250ml",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
    note:"4种变体：植物脂肪+新鲜蔬菜 / 鲜肉×2 / 鱼×1 / 骨头×3；都加水250ml"},
   {name:"咖啡", en:"Coffee", confirmed:true,
-   mats:[["袋装咖啡",1],["水",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
+   mats:[["袋装咖啡",1],["水250ml",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
    note:"早八必备；水250ml"},
+  {name:"食用油", en:"Cooking Oil", confirmed:true,
+   mats:[["植物脂肪",2],["水250ml",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
+   note:"由植物脂肪提炼；水250ml"},
   {name:"热巧克力", en:"Hot Chocolate", confirmed:true,
-   mats:[["盒装热可可",1],["牛奶",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
+   mats:[["盒装热可可",1],["牛奶250ml",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
    note:"牛奶250ml"},
   {name:"枫糖浆", en:"Maple Syrup", confirmed:true,
    mats:[["未熬制的枫树液",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"3:00", unlock:"",
    note:"枫树液250ml熬制"},
   {name:"茶", en:"Tea", confirmed:true,
-   mats:[["盒装茶包",1],["水",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
+   mats:[["盒装茶包",1],["水250ml",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
    note:"水250ml"},
   {name:"毛蕊花茶", en:"Mullein Tea", confirmed:true,
-   mats:[["磨碎的毛蕊花",5],["水",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
+   mats:[["磨碎的毛蕊花",5],["水250ml",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
    note:"草药茶；水250ml"},
   {name:"巨型猪草茶", en:"Hogweed Tea", confirmed:true,
-   mats:[["磨碎的巨型猪草",5],["水",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
+   mats:[["磨碎的巨型猪草",5],["水250ml",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
    note:"草药茶；水250ml"},
   {name:"艾草茶", en:"Mugwort Tea", confirmed:true,
-   mats:[["磨碎的艾草",5],["水",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
+   mats:[["磨碎的艾草",5],["水250ml",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
    note:"草药茶；水250ml"},
   {name:"紫松果菊茶", en:"Echinacea Tea", confirmed:true,
-   mats:[["磨碎的紫松果菊",5],["水",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
+   mats:[["磨碎的紫松果菊",5],["水250ml",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
    note:"草药茶；水250ml"},
   {name:"鼠尾草茶", en:"Sage Tea", confirmed:true,
-   mats:[["磨碎的鼠尾草",5],["水",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
+   mats:[["磨碎的鼠尾草",5],["水250ml",1]], tool:"锅/平底锅/烤盘/烧水壶", time:"0:05", unlock:"",
    note:"草药茶；水250ml"},
-
-  // ---- 切片/装饰（小刀） ----
+  {name:"植物脂肪", en:"Plant Fat", confirmed:true, mats:[["新鲜蔬菜",3],["水150ml",1]], tool:"锅", time:"2:30", unlock:"", note:"饥饿恢复8%，烹饪2.0x；水150ml"},
   {name:"南瓜灯", en:"Jack-o-Lantern", confirmed:true,
    mats:[["南瓜",1]], tool:"小刀", time:"0:05", unlock:"", note:"饥饿恢复20%"},
   {name:"苹果片", en:"Apple Slices", confirmed:true,
@@ -1068,9 +663,393 @@ const PRESET = [
    mats:[["番茄",1]], tool:"小刀", time:"0:05", unlock:"", note:"饥饿恢复0%"},
   {name:"西瓜片", en:"Watermelon Slices", confirmed:true,
    mats:[["西瓜",1]], tool:"小刀", time:"0:05", unlock:"", note:"饥饿恢复4%"},
-
-
-  // ---- 建造/家具/存储 ----
+  {name:"带图钉的木矛", en:"Spear with Thumbtack", confirmed:true,
+   mats:[["木矛",1],["胶带",1],["图钉",1]], tool:"", time:"0:30", unlock:"", note:""},
+  {name:"带勺子的木矛", en:"Spear with Spoon", confirmed:true,
+   mats:[["木矛",1],["胶带",1],["勺子",1]], tool:"", time:"0:30", unlock:"", note:"远程喂汤"},
+  {name:"带螺丝刀的木矛", en:"Spear with Screwdriver", confirmed:true,
+   mats:[["木矛",1],["胶带",1],["十字螺丝刀",1]], tool:"", time:"0:30", unlock:"",
+   note:"变体：一字螺丝刀×1"},
+  {name:"火药", en:"Gunpowder", confirmed:true,
+   mats:[["硫磺",3]], tool:"", time:"0:05", unlock:"", note:"制作物品用"},
+  {name:"铁箭", en:"Iron Arrow", confirmed:true,
+   mats:[["木杆",1],["废铁",1]], tool:"", time:"0:04", unlock:"", note:""},
+  {name:"改良铁箭", en:"Improved Iron Arrow", confirmed:true,
+   mats:[["铁箭",1],["羽毛",1],["线材",1]], tool:"", time:"0:04", unlock:"", note:""},
+  {name:"弓", en:"Bow", confirmed:true,
+   mats:[["废木料",3],["线材",1],["胶带",1]], tool:"", time:"0:10", unlock:"", note:""},
+  {name:"碎瓶子", en:"Broken Bottle", confirmed:true,
+   mats:[["啤酒瓶",1]], tool:"", time:"0:04", unlock:"",
+   note:"5种变体：啤酒瓶/伏特加/葡萄酒/威士忌/金酒各×1"},
+  {name:"利齿剑", en:"Spiked Sword", confirmed:true,
+   mats:[["强化金属支架",3],["割草机刀片",1],["羊角锤",1]], tool:"重型锤子/工业级焊机", time:"3:30", unlock:"",
+   note:"制作100/95"},
+  {name:"工兵铲", en:"Entrenching Tool", confirmed:true,
+   mats:[["铲子",1],["胶带",3]], tool:"电动切割工具/基础焊机", time:"3:00", unlock:"",
+   note:"制作100/75"},
+  {name:"钉头锤", en:"Nail Club", confirmed:true,
+   mats:[["棒球棍",1],["太阳模型",1],["剪刀",3],["胶水50ml",1]], tool:"锤子", time:"3:30", unlock:"",
+   note:"胶水50ml；制作100/95"},
+  {name:"钉刺棒球棍", en:"Nail Baseball Bat", confirmed:true,
+   mats:[["棒球棍",1],["钉子",5]], tool:"锤子", time:"0:30", unlock:"", note:""},
+  {name:"钉刺木板", en:"Nail Plank", confirmed:true,
+   mats:[["木板",1],["钉子",5]], tool:"锤子", time:"0:30", unlock:"", note:""},
+  {name:"钉刺木桨", en:"Nail Oar", confirmed:true,
+   mats:[["木桨",1],["钉子",5]], tool:"锤子", time:"0:30", unlock:"", note:""},
+  {name:"木矛", en:"Wooden Spear", confirmed:true,
+   mats:[["木杆",1]], tool:"基础切割工具", time:"0:30", unlock:"",
+   note:"各种改装木矛的基础件"},
+  {name:"带黄油刀的木矛", en:"Spear with Butter Knife", confirmed:true,
+   mats:[["木矛",1],["胶带",1],["黄油刀",1]], tool:"", time:"0:30", unlock:"", note:""},
+  {name:"带格斗刀的木矛", en:"Spear with Combat Knife", confirmed:true,
+   mats:[["木矛",1],["胶带",1],["格斗刀",1]], tool:"", time:"0:30", unlock:"", note:"制作100/55"},
+  {name:"带叉子的木矛", en:"Spear with Fork", confirmed:true,
+   mats:[["木矛",1],["胶带",1],["叉子",1]], tool:"", time:"0:30", unlock:"", note:"远程喂食"},
+  {name:"带小刀的木矛", en:"Spear with Bread Knife", confirmed:true,
+   mats:[["木矛",1],["胶带",1],["面包刀",1]], tool:"", time:"0:30", unlock:"", note:"远程切菜"},
+  {name:"带砍刀的木矛", en:"Spear with Machete", confirmed:true,
+   mats:[["木矛",1],["胶带",1],["砍刀",1]], tool:"", time:"0:30", unlock:"", note:"制作100/65"},
+  {name:"带剪刀的木矛", en:"Spear with Scissors", confirmed:true,
+   mats:[["木矛",1],["胶带",1],["剪刀",1]], tool:"", time:"0:30", unlock:"", note:""},
+  {name:"原木", en:"Raw Wood", confirmed:false,
+   mats:[], tool:"", time:"", unlock:"", note:"原材料，靠砍伐/搜刮获得，不可合成"},
+  {name:"铝锭", en:"Aluminum Ingot", confirmed:true,
+   mats:[["废铝",10],["铝土矿粉",5]], tool:"熔炉", time:"0:04", unlock:"", note:"冶炼产出；高级铝箔要用"},
+  {name:"铜锭", en:"Copper Ingot", confirmed:true,
+   mats:[["粗黄铜矿",3],["电子废料",5],["破损电线",10]], tool:"熔炉", time:"0:04", unlock:"", note:"冶炼产出；铜线捆要用"},
+  {name:"塑料锭", en:"Plastic Ingot", confirmed:true,
+   mats:[["废塑料",10]], tool:"熔炉", time:"0:02", unlock:"", note:"熔炼产出；塑料外壳要用"},
+  {name:"粗铝土矿", en:"Raw Bauxite", confirmed:false,
+   mats:[], tool:"", time:"", unlock:"", note:"原材料，挖矿获得；铝土矿粉原料"},
+  {name:"粗石灰石", en:"Raw Limestone", confirmed:false,
+   mats:[], tool:"", time:"", unlock:"", note:"原材料，挖矿获得；石灰石粉原料"},
+  {name:"破损电线", en:"Damaged Wiring", confirmed:false,
+   mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮/拆解电器；铜线捆原料"},
+  {name:"袋装混凝土拌料", en:"Concrete Mix Bag", confirmed:false,
+   mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮杂货店/工地；混凝土浆原料"},
+  {name:"载具刹车片", en:"Brake Pad", confirmed:false,
+   mats:[], tool:"", time:"", unlock:"", note:"半成品，被汽车刹车总成使用；靠搜刮/拆解获得，不可合成"},
+  {name:"电池充电器", en:"Battery Charger", confirmed:false, mats:[], tool:"", time:"", unlock:"电气建筑 Lv.10", note:"600 XP/个"},
+  {name:"简易电池", en:"Makeshift Battery", confirmed:false, mats:[], tool:"", time:"", unlock:"电气建筑 Lv.15", note:"2793 XP/个"},
+  {name:"简易冰柜", en:"Makeshift Freezer", confirmed:false, mats:[], tool:"", time:"", unlock:"电气建筑 Lv.25", note:"2793 XP/个"},
+  {name:"简易冰箱", en:"Makeshift Fridge", confirmed:false, mats:[], tool:"", time:"", unlock:"电气建筑 Lv.25", note:"2793 XP/个"},
+  {name:"燃气发电机", en:"Gas Generator", confirmed:false, mats:[], tool:"", time:"", unlock:"电气建筑 Lv.30", note:"2793 XP/个"},
+  {name:"简易太阳能板", en:"Makeshift Solar Panel", confirmed:false, mats:[], tool:"", time:"", unlock:"电气建筑 Lv.50", note:"5409 XP/个"},
+  {name:"简易风车", en:"Makeshift Windmill", confirmed:false, mats:[], tool:"", time:"", unlock:"电气建筑 Lv.50", note:"5409 XP/个"},
+  {name:"壁挂摄像头", en:"Wall-Mounted Camera", confirmed:false, mats:[], tool:"", time:"", unlock:"电气建筑 Lv.75", note:"5409 XP/个，需水晶"},
+  {name:"小废金属板", en:"Small Scrap Metal Sheet", confirmed:true,
+   mats:[["废金属板",1]], tool:"重型切割工具", time:"0:08", unlock:"制作 Lv.60",
+   note:"多个电气/载具配方要用"},
+  {name:"铁锭", en:"Iron Ingot", confirmed:true, mats:[["粗赤铁矿",5],["废铁",10]], tool:"熔炉", time:"0:06", unlock:"", note:"冶炼产出；高级铁锭/废金属板/废金属管原料"},
+  {name:"废橡胶", en:"Scrap Rubber", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮轮胎/橡胶制品；橡胶卷原料"},
+  {name:"珠宝废料", en:"Jewelry Scrap", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮旧首饰；水晶原料"},
+  {name:"粗石墨", en:"Raw Graphite", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，挖矿；石墨粉原料"},
+  {name:"玻璃板", en:"Glass Sheet", confirmed:true, mats:[["碎玻璃",30],["纯净硅砂",5]], tool:"熔炉", time:"0:30", unlock:"", note:"熔炼产出；窗户玻璃原料"},
+  {name:"电子废料", en:"Electronic Scrap", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，拆解电器；密码锁/遥控器/手持无线电要用"},
+  {name:"报纸", en:"Newspaper", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮；记事本原料"},
+  {name:"废纸", en:"Waste Paper", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮；记事本原料"},
+  {name:"灯泡", en:"Light Bulb", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮；手电筒原料；汽车拆卸：车灯，需螺丝刀+重型钳子"},
+  {name:"手机", en:"Phone", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮；GPS原料"},
+  {name:"废木料", en:"Scrap Wood", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，拆解家具；羊角锤原料"},
+  {name:"软皮革条", en:"Soft Leather Strip", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，打猎/搜刮；水袋原料"},
+  {name:"缝衣针", en:"Sewing Needle", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮；鱼钩原料"},
+  {name:"线材", en:"Wire", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，拆解电线；鱼线原料"},
+  {name:"玻璃碗", en:"Glass Bowl", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮；炖锅原料"},
+  {name:"木质长矛", en:"Wooden Spear", confirmed:false, mats:[], tool:"", time:"", unlock:"初期", note:"250 XP/个，材料易获取，具体进游戏看"},
+  {name:"白松露和牛", en:"Wagyu with White Truffle", confirmed:true,
+   mats:[["和牛",1],["白松露",1],["黑蒜",1],["高档玫瑰盐",1],["食用油250ml",1]], tool:"平底锅", time:"6:00", unlock:"",
+   note:"饥饿恢复38%；力量2.0x 活力2.0x；食用油250ml"},
+  {name:"贝果", en:"Bagel", confirmed:true,
+   mats:[["袋装糖",1],["袋装面粉",1],["袋装酵母粉",1],["水250ml",1]], tool:"锅", time:"4:10", unlock:"",
+   note:"饥饿恢复12%；水250ml"},
+  {name:"布朗尼", en:"Brownie", confirmed:true,
+   mats:[["袋装糖",1],["高档巧克力",1],["袋装面粉",1]], tool:"烤盘", time:"7:30", unlock:"",
+   note:"饥饿恢复3%；巧克力分牛奶/果仁/黑三种变体"},
+  {name:"炒饭", en:"Fried Rice", confirmed:true,
+   mats:[["糙米",1],["食用油250ml",1]], tool:"平底锅", time:"2:00", unlock:"",
+   note:"饥饿恢复27%；食用油250ml"},
+  {name:"炒时蔬", en:"Stir-fried Veggies", confirmed:true,
+   mats:[["卷心菜",1],["胡萝卜",1],["食用油250ml",1]], tool:"平底锅", time:"4:10", unlock:"",
+   note:"饥饿恢复38%；求生2.0x；变体：卷心菜+洋葱/洋葱+胡萝卜"},
+  {name:"炒洋葱", en:"Sauteed Onions", confirmed:true,
+   mats:[["洋葱",1],["食用油250ml",1]], tool:"平底锅", time:"2:00", unlock:"",
+   note:"饥饿恢复6%；食用油250ml"},
+  {name:"橙子果酱", en:"Orange Jam", confirmed:true,
+   mats:[["橙子",1],["袋装糖",1],["水250ml",1]], tool:"锅", time:"5:00", unlock:"",
+   note:"饥饿恢复6%；社交2.0x 交易2.0x；水250ml"},
+  {name:"蛋花汤", en:"Egg Drop Soup", confirmed:true,
+   mats:[["鸡蛋",1],["肉汤250ml",1]], tool:"锅", time:"0:45", unlock:"",
+   note:"饥饿恢复30%；活力2.0x；肉汤250ml"},
+  {name:"炖牛肉（烤盘）", en:"Beef Stew (Roasting)", confirmed:true,
+   mats:[["牛肉",1],["胡萝卜",1],["洋葱",1],["肉汤250ml",1]], tool:"烤盘", time:"6:40", unlock:"",
+   note:"饥饿恢复90%；建造2.0x 制作2.0x；肉汤250ml"},
+  {name:"炖牛肉（锅）", en:"Beef Stew (Pot)", confirmed:true,
+   mats:[["牛肉",1],["土豆",1],["胡萝卜",1],["肉汤250ml",1]], tool:"锅", time:"3:20", unlock:"",
+   note:"饥饿恢复45%；活力2.0x；肉汤250ml"},
+  {name:"鹅肝天妇罗", en:"Foie Gras Tempura", confirmed:true,
+   mats:[["肥肝",1],["酥皮",1],["高档玫瑰盐",1],["黑蒜",1],["食用油250ml",1]], tool:"平底锅", time:"6:00", unlock:"",
+   note:"饥饿恢复38%；力量2.0x 活力2.0x；食用油250ml"},
+  {name:"法棍面包", en:"Baguette", confirmed:true,
+   mats:[["袋装盐",1],["袋装面粉",1],["袋装酵母粉",1],["水250ml",1]], tool:"烤盘", time:"7:30", unlock:"",
+   note:"饥饿恢复24%；水250ml"},
+  {name:"法式冷汤", en:"French Vichyssoise", confirmed:true,
+   mats:[["土豆",1],["洋葱",1],["牛奶250ml",1]], tool:"锅", time:"5:00", unlock:"",
+   note:"饥饿恢复38%；机械2.0x 维修2.0x；牛奶250ml"},
+  {name:"法式咸派", en:"Quiche", confirmed:true,
+   mats:[["鸡蛋",1],["奶酪",1],["牛奶250ml",1]], tool:"烤盘", time:"8:20", unlock:"",
+   note:"饥饿恢复26%；力量2.0x 活力2.0x；牛奶250ml"},
+  {name:"番茄汤", en:"Tomato Soup", confirmed:true,
+   mats:[["番茄",1],["肉汤250ml",1]], tool:"锅", time:"2:00", unlock:"",
+   note:"饥饿恢复15%；机械2.0x；变体：番茄片×2+肉汤250ml"},
+  {name:"罐装汤", en:"Canned Soup", confirmed:true,
+   mats:[["罐装汤(罐头)",1]], tool:"锅", time:"1:40", unlock:"",
+   note:"饥饿恢复21%；只是加热已有罐头"},
+  {name:"海鲜浓汤", en:"Seafood Chowder", confirmed:true,
+   mats:[["盒装鱼",1],["土豆",1]], tool:"锅", time:"3:20", unlock:"",
+   note:"饥饿恢复26%；活力2.0x；6种变体：盒装鱼/金枪鱼罐头/鲱鱼罐头+土豆或洋葱，部分加肉汤250ml"},
+  {name:"红接骨木果酱", en:"Elderberry Jam", confirmed:true,
+   mats:[["红接骨木果",3],["袋装糖",1]], tool:"锅", time:"5:00", unlock:"",
+   note:"饥饿恢复15%"},
+  {name:"胡萝卜汤", en:"Carrot Soup", confirmed:true,
+   mats:[["胡萝卜",1],["肉汤250ml",1]], tool:"锅", time:"2:00", unlock:"",
+   note:"饥饿恢复22%；机械2.0x；变体：胡萝卜片×2+肉汤250ml"},
+  {name:"华夫饼", en:"Waffles", confirmed:true,
+   mats:[["盒装华夫饼",1]], tool:"平底锅", time:"0:15", unlock:"",
+   note:"饥饿恢复9%"},
+  {name:"黄油玉米", en:"Buttered Corn", confirmed:true,
+   mats:[["黄油",1],["玉米",1]], tool:"平底锅", time:"0:50", unlock:"",
+   note:"饥饿恢复9%"},
+  {name:"惠灵顿牛排", en:"Beef Wellington", confirmed:true,
+   mats:[["和牛",1],["酥皮",1],["高档玫瑰盐",1],["黑蒜",1],["食用油250ml",1]], tool:"平底锅", time:"6:00", unlock:"",
+   note:"饥饿恢复38%；力量2.0x 活力2.0x；食用油250ml"},
+  {name:"家常芝士通心粉", en:"Mac and Cheese", confirmed:true,
+   mats:[["有机奶酪通心粉",1],["奶酪",1],["黄油",1],["牛奶250ml",1]], tool:"烤盘", time:"5:50", unlock:"",
+   note:"饥饿恢复26%；搜刮2.0x；牛奶250ml"},
+  {name:"煎蛋", en:"Fried Egg", confirmed:true,
+   mats:[["鸡蛋",1],["食用油250ml",1]], tool:"平底锅", time:"0:15", unlock:"",
+   note:"饥饿恢复30%；食用油250ml"},
+  {name:"煎蛋卷", en:"Omelette", confirmed:true,
+   mats:[["鸡蛋",1],["洋蓟",1],["食用油250ml",1]], tool:"平底锅", time:"0:35", unlock:"",
+   note:"饥饿恢复45%；电工2.0x 求生2.0x；6种变体：洋蓟/牛油果/西兰花/洋葱/番茄/奶酪"},
+  {name:"金箔龙虾排", en:"Gold Leaf Lobster", confirmed:true,
+   mats:[["龙虾",1],["可食用金箔",1],["高档玫瑰盐",1],["藏红花",1],["水250ml",1]], tool:"平底锅", time:"6:00", unlock:"",
+   note:"饥饿恢复38%；力量2.0x 活力2.0x；水250ml"},
+  {name:"法式蜗牛", en:"Escargots", confirmed:true,
+   mats:[["食用蜗牛",1],["黑蒜",1],["高档玫瑰盐",1],["食用油250ml",1]], tool:"平底锅", time:"6:00", unlock:"",
+   note:"饥饿恢复38%；力量2.0x 活力2.0x；食用油250ml"},
+  {name:"烤土豆", en:"Baked Potato", confirmed:true,
+   mats:[["土豆",1],["黄油",1]], tool:"烤盘", time:"1:00", unlock:"",
+   note:"饥饿恢复15%"},
+  {name:"烤鱼", en:"Baked Fish", confirmed:true,
+   mats:[["鱼",1]], tool:"平底锅/锅/烤盘", time:"2:00", unlock:"",
+   note:"饥饿恢复105%"},
+  {name:"烤玉米", en:"Roasted Corn", confirmed:true,
+   mats:[["玉米",1]], tool:"平底锅", time:"0:50", unlock:"",
+   note:"饥饿恢复9%"},
+  {name:"玛芬蛋糕", en:"Muffin", confirmed:true,
+   mats:[["黄油",1],["袋装面粉",1],["袋装糖",1],["牛奶250ml",1]], tool:"烤盘", time:"7:30", unlock:"",
+   note:"饥饿恢复6%；牛奶250ml"},
+  {name:"麦卢卡蛋白酥", en:"Manuka Meringue", confirmed:true,
+   mats:[["鸭蛋",1],["酥皮",1],["麦卢卡蜂蜜",1]], tool:"平底锅", time:"6:00", unlock:"",
+   note:"饥饿恢复38%；力量2.0x 活力2.0x"},
+  {name:"馒头热狗", en:"Hot Dog Bun", confirmed:true,
+   mats:[["热狗",1],["热狗面包",1],["袋装盐",1],["水250ml",1]], tool:"平底锅", time:"0:20", unlock:"",
+   note:"饥饿恢复38%；建造2.0x 制作2.0x；水250ml"},
+  {name:"毛血旺", en:"Spicy Blood Stew", confirmed:true,
+   mats:[["鸡肉面",1],["动物血液250ml",1]], tool:"锅", time:"2:00", unlock:"",
+   note:"饥饿恢复75%；活力2.0x；变体：番茄片×2+肉汤250ml；动物血液250ml"},
+  {name:"美味牛肝菌汤", en:"Porcini Soup", confirmed:true,
+   mats:[["磨碎的美味牛肝菌",5],["水250ml",1]], tool:"锅", time:"2:00", unlock:"",
+   note:"饥饿恢复60%；变体：胡萝卜片×2+肉汤250ml；水250ml"},
+  {name:"米饭", en:"Cooked Rice", confirmed:true,
+   mats:[["糙米",1],["水250ml",1]], tool:"锅", time:"0:37", unlock:"",
+   note:"饥饿恢复27%；水250ml"},
+  {name:"密歇根肉酱", en:"Michigan Chili", confirmed:true,
+   mats:[["大蒜",1],["番茄罐头",1],["牛肉",1],["辣椒酱250ml",1]], tool:"锅", time:"0:20", unlock:"",
+   note:"饥饿恢复38%；建造2.0x 制作2.0x 机械2.0x；辣椒酱250ml"},
+  {name:"密歇根肉酱热狗", en:"Michigan Hot Dog", confirmed:true,
+   mats:[["密歇根肉酱",1],["馒头热狗",1],["洋葱",1]], tool:"平底锅", time:"0:20", unlock:"",
+   note:"饥饿恢复38%；建造/制作/电工/机械/维修各2.0x"},
+  {name:"面包", en:"Bread", confirmed:true,
+   mats:[["袋装糖",1],["袋装面粉",1],["袋装酵母粉",1],["水250ml",1]], tool:"烤盘", time:"7:30", unlock:"",
+   note:"饥饿恢复30%；水250ml"},
+  {name:"墨西哥鸡肉薄饼", en:"Chicken Quesadilla", confirmed:true,
+   mats:[["盒装玉米饼",1],["奶酪",1],["鸡肉",1],["食用油250ml",1]], tool:"平底锅", time:"0:20", unlock:"",
+   note:"饥饿恢复30%；驾驶2.0x；食用油250ml"},
+  {name:"墨西哥鸡肉卷", en:"Chicken Burrito", confirmed:true,
+   mats:[["墨西哥鸡肉卷食材包",1],["鸡肉",1],["盒装玉米饼",1]], tool:"平底锅", time:"1:40", unlock:"",
+   note:"饥饿恢复30%；驾驶2.0x"},
+  {name:"墨西哥烤肉卷", en:"Carne Asada Burrito", confirmed:true,
+   mats:[["墨西哥烤肉卷食材包",1],["牛肉",1],["盒装玉米饼",1]], tool:"平底锅", time:"1:40", unlock:"",
+   note:"饥饿恢复30%；驾驶2.0x"},
+  {name:"墨西哥牛肉薄饼", en:"Beef Quesadilla", confirmed:true,
+   mats:[["盒装玉米饼",1],["奶酪",1],["牛肉",1],["食用油250ml",1]], tool:"平底锅", time:"0:20", unlock:"",
+   note:"饥饿恢复30%；驾驶2.0x；食用油250ml"},
+  {name:"奶油焗土豆", en:"Scalloped Potatoes", confirmed:true,
+   mats:[["土豆",1],["奶酪",1],["洋葱",1],["牛奶250ml",1]], tool:"烤盘", time:"6:40", unlock:"",
+   note:"饥饿恢复45%；力量2.0x 活力2.0x；牛奶250ml"},
+  {name:"奶油培根意面", en:"Fettuccine Alfredo", confirmed:true,
+   mats:[["意面",1],["猪肉",1],["芝士火锅",1],["牛奶250ml",1]], tool:"锅", time:"5:00", unlock:"",
+   note:"饥饿恢复38%；力量2.0x 活力2.0x；牛奶250ml"},
+  {name:"奶油玉米汤", en:"Creamed Corn Soup", confirmed:true,
+   mats:[["玉米",1],["肉汤250ml",1]], tool:"锅", time:"2:00", unlock:"",
+   note:"饥饿恢复22%；机械2.0x；变体：玉米罐头×1+肉汤250ml"},
+  {name:"南瓜汤", en:"Pumpkin Soup", confirmed:true,
+   mats:[["南瓜",1],["肉汤250ml",1]], tool:"锅", time:"2:00", unlock:"",
+   note:"饥饿恢复30%；机械2.0x；肉汤250ml"},
+  {name:"酿番茄", en:"Stuffed Tomato", confirmed:true,
+   mats:[["番茄",1],["奶酪",1],["水250ml",1]], tool:"锅", time:"0:50", unlock:"",
+   note:"饥饿恢复4%；水250ml"},
+  {name:"牛角面包", en:"Croissant", confirmed:true,
+   mats:[["黄油",1],["袋装面粉",1],["袋装酵母粉",1],["牛奶250ml",1]], tool:"烤盘", time:"7:30", unlock:"",
+   note:"饥饿恢复4%；牛奶250ml"},
+  {name:"牛肉玉米卷饼", en:"Beef Taco", confirmed:true,
+   mats:[["玉米卷饼食材包",1],["牛肉",1],["盒装玉米饼",1]], tool:"平底锅", time:"1:40", unlock:"",
+   note:"饥饿恢复45%；驾驶2.0x"},
+  {name:"帕玛森奶酪鸡排", en:"Chicken Parmesan", confirmed:true,
+   mats:[["鸡肉",1],["奶酪",1],["番茄罐头",1]], tool:"烤盘", time:"5:00", unlock:"",
+   note:"饥饿恢复75%；建造2.0x 制作2.0x；变体：番茄×1"},
+  {name:"巧克力蛋糕", en:"Chocolate Cake", confirmed:true,
+   mats:[["鸡蛋",1],["高档牛奶巧克力",1],["袋装面粉",1],["牛奶250ml",1]], tool:"烤盘", time:"8:20", unlock:"",
+   note:"饥饿恢复30%；3种巧克力变体；牛奶250ml"},
+  {name:"巧克力火锅", en:"Chocolate Fondue", confirmed:true,
+   mats:[["高档牛奶巧克力",1],["颗粒花生酱",1],["袋装盐",1],["牛奶250ml",1]], tool:"锅", time:"5:50", unlock:"",
+   note:"饥饿恢复22%；烹饪2.0x；牛奶250ml"},
+  {name:"巧克力曲奇", en:"Chocolate Chip Cookie", confirmed:true,
+   mats:[["袋装糖",1],["高档牛奶巧克力",1],["袋装面粉",1],["食用油250ml",1]], tool:"烤盘", time:"7:30", unlock:"",
+   note:"饥饿恢复3%；3种巧克力变体；食用油250ml"},
+  {name:"巧克力甜甜圈", en:"Chocolate Donut", confirmed:true,
+   mats:[["袋装糖",1],["高档牛奶巧克力",1],["袋装面粉",1],["食用油250ml",1]], tool:"锅", time:"0:50", unlock:"",
+   note:"饥饿恢复3%；3种巧克力变体；食用油250ml"},
+  {name:"清洁剂乱炖", en:"Cleaner Stew", confirmed:true,
+   mats:[["洗手液",1]], tool:"锅", time:"2:30", unlock:"",
+   note:"饥饿恢复15%；活力2.0x"},
+  {name:"砂锅鸡肉", en:"Casserole Chicken", confirmed:true,
+   mats:[["鸡肉",1],["胡萝卜",1],["西兰花",1]], tool:"烤盘", time:"6:40", unlock:"",
+   note:"饥饿恢复75%；建造2.0x 制作2.0x；变体：奶酪×1+西兰花×1"},
+  {name:"什锦饭", en:"Jambalaya", confirmed:true,
+   mats:[["烟熏香肠",1],["糙米",1],["洋葱",1],["肉汤250ml",1]], tool:"锅", time:"5:50", unlock:"",
+   note:"饥饿恢复75%；建造2.0x 制作2.0x；肉汤250ml"},
+  {name:"什锦肉串", en:"Kebab", confirmed:true,
+   mats:[["茄子",1],["牛肉",1],["大蒜",1],["食用油250ml",1]], tool:"平底锅", time:"4:10", unlock:"",
+   note:"饥饿恢复38%；力量2.0x 活力2.0x；食用油250ml"},
+  {name:"水煮鸡蛋", en:"Boiled Egg", confirmed:true,
+   mats:[["鸡蛋",1],["水250ml",1]], tool:"锅", time:"1:15", unlock:"",
+   note:"饥饿恢复30%；水250ml"},
+  {name:"水煮卷心菜", en:"Boiled Cabbage", confirmed:true,
+   mats:[["卷心菜",1],["水250ml",1]], tool:"锅", time:"2:30", unlock:"",
+   note:"饥饿恢复48%；水250ml"},
+  {name:"水煮南瓜", en:"Boiled Pumpkin", confirmed:true,
+   mats:[["南瓜",1],["水250ml",1]], tool:"锅", time:"2:30", unlock:"",
+   note:"饥饿恢复60%；水250ml"},
+  {name:"水煮热狗", en:"Boiled Hot Dog", confirmed:true,
+   mats:[["热狗",1],["水250ml",1]], tool:"锅", time:"1:50", unlock:"",
+   note:"饥饿恢复45%；变体：啤酒250ml；水250ml"},
+  {name:"水煮西兰花", en:"Boiled Broccoli", confirmed:true,
+   mats:[["西兰花",1],["水250ml",1]], tool:"锅", time:"2:30", unlock:"",
+   note:"饥饿恢复15%；水250ml"},
+  {name:"水煮玉米", en:"Boiled Corn", confirmed:true,
+   mats:[["玉米",1],["水250ml",1]], tool:"锅", time:"1:40", unlock:"",
+   note:"饥饿恢复9%；水250ml"},
+  {name:"炭烤番茄", en:"Roasted Tomato", confirmed:true,
+   mats:[["番茄",1]], tool:"平底锅", time:"0:50", unlock:"",
+   note:"饥饿恢复4%"},
+  {name:"炭烤花生果酱三明治", en:"PB&J Sandwich", confirmed:true,
+   mats:[["面包片",1],["颗粒花生酱",1],["草莓酱",1]], tool:"平底锅", time:"0:15", unlock:"",
+   note:"饥饿恢复15%；驾驶2.0x；变体：橙子果酱×1"},
+  {name:"炭烤南瓜", en:"Roasted Pumpkin", confirmed:true,
+   mats:[["南瓜",1]], tool:"平底锅", time:"0:50", unlock:"",
+   note:"饥饿恢复60%"},
+  {name:"炭烤芝士三明治", en:"Grilled Cheese", confirmed:true,
+   mats:[["面包片",1],["奶酪",1],["黄油",1],["食用油250ml",1]], tool:"平底锅", time:"0:15", unlock:"",
+   note:"饥饿恢复22%；驾驶2.0x；食用油250ml"},
+  {name:"土豆汤", en:"Potato Soup", confirmed:true,
+   mats:[["土豆",1],["牛奶250ml",1]], tool:"锅", time:"2:00", unlock:"",
+   note:"饥饿恢复22%；机械2.0x；牛奶250ml"},
+  {name:"西葫芦汤", en:"Zucchini Soup", confirmed:true,
+   mats:[["西葫芦",1],["肉汤250ml",1]], tool:"锅", time:"2:00", unlock:"",
+   note:"饥饿恢复30%；机械2.0x；变体：半个西葫芦×2+肉汤250ml"},
+  {name:"香煎肉排", en:"Pan-seared Steak", confirmed:true,
+   mats:[["可香煎肉类",1]], tool:"平底锅", time:"2:05", unlock:"",
+   note:"饥饿恢复45%"},
+  {name:"香辣炒蛋", en:"Spicy Scrambled Eggs", confirmed:true,
+   mats:[["鸡蛋",1],["袋装盐",1],["辣椒酱250ml",1]], tool:"平底锅", time:"0:25", unlock:"",
+   note:"饥饿恢复30%；电工2.0x 求生2.0x；辣椒酱250ml"},
+  {name:"新奥尔良烤生蚝", en:"Oysters Rockefeller", confirmed:true,
+   mats:[["牡蛎",1],["陈年奶酪",1],["黑蒜",1],["水250ml",1]], tool:"平底锅", time:"6:00", unlock:"",
+   note:"饥饿恢复38%；力量2.0x 活力2.0x；水250ml"},
+  {name:"鸭蛋奶冻", en:"Duck Egg Panna Cotta", confirmed:true,
+   mats:[["鸭蛋",1],["麦卢卡蜂蜜",1],["马达加斯加香草精",1]], tool:"平底锅", time:"6:00", unlock:"",
+   note:"饥饿恢复38%；力量2.0x 活力2.0x"},
+  {name:"洋葱汤", en:"French Onion Soup", confirmed:true,
+   mats:[["洋葱",1],["肉汤250ml",1]], tool:"锅", time:"2:00", unlock:"",
+   note:"饥饿恢复22%；机械2.0x；变体：半个洋葱×2+肉汤250ml"},
+  {name:"野生黑莓果酱", en:"Blackberry Jam", confirmed:true,
+   mats:[["野生黑莓",3],["袋装糖",1]], tool:"锅", time:"5:00", unlock:"",
+   note:"饥饿恢复15%"},
+  {name:"意式烩饭", en:"Risotto", confirmed:true,
+   mats:[["糙米",1],["黄油",1],["肉汤250ml",1]], tool:"锅/平底锅/烤盘", time:"2:55", unlock:"",
+   note:"饥饿恢复56%；搜刮2.0x；肉汤250ml"},
+  {name:"犹太土豆饼", en:"Latkes", confirmed:true,
+   mats:[["土豆",1],["袋装面粉",1],["食用油250ml",1]], tool:"平底锅", time:"2:00", unlock:"",
+   note:"饥饿恢复30%；电工2.0x 求生2.0x；食用油250ml"},
+  {name:"鱼子酱扇贝", en:"Scallops with Caviar", confirmed:true,
+   mats:[["扇贝",1],["鱼子酱",1],["黑蒜",1],["高档玫瑰盐",1],["食用油250ml",1]], tool:"平底锅", time:"6:00", unlock:"",
+   note:"饥饿恢复38%；力量2.0x 活力2.0x；食用油250ml"},
+  {name:"炸肉", en:"Fried Meat", confirmed:true,
+   mats:[["可油炸肉类",1],["食用油250ml",1]], tool:"平底锅", time:"0:30", unlock:"",
+   note:"饥饿恢复45%；食用油250ml"},
+  {name:"炸鱼", en:"Fried Fish", confirmed:true,
+   mats:[["鱼",1],["食用油250ml",1]], tool:"平底锅", time:"0:30", unlock:"",
+   note:"饥饿恢复105%；食用油250ml"},
+  {name:"章鱼小丸子", en:"Takoyaki", confirmed:true,
+   mats:[["章鱼切片",1],["鲣鱼片",1],["日式蛋黄酱",1],["干海藻",1],["水250ml",1]], tool:"平底锅", time:"6:00", unlock:"",
+   note:"饥饿恢复38%；力量2.0x 活力2.0x；水250ml"},
+  {name:"榛果焦糖煎牛排", en:"Hazelnut Caramel Steak", confirmed:true,
+   mats:[["牛肉",1],["黄油",1],["榛果",1],["食用油250ml",1]], tool:"平底锅", time:"4:10", unlock:"",
+   note:"饥饿恢复38%；力量2.0x 活力2.0x；食用油250ml"},
+  {name:"芝士火锅", en:"Cheese Fondue", confirmed:true,
+   mats:[["奶酪",1],["番茄",1],["土豆",1],["葡萄酒250ml",1]], tool:"锅", time:"5:50", unlock:"",
+   note:"饥饿恢复22%；烹饪2.0x；葡萄酒250ml"},
+  {name:"芝士披萨", en:"Cheese Pizza", confirmed:true,
+   mats:[["番茄",1],["奶酪",1],["袋装面粉",1],["食用油250ml",1]], tool:"平底锅", time:"10:50", unlock:"",
+   note:"饥饿恢复180%；食用油250ml"},
+  {name:"芝士通心粉", en:"Cheese Macaroni", confirmed:true,
+   mats:[["有机奶酪通心粉",1],["水250ml",1]], tool:"锅", time:"0:45", unlock:"",
+   note:"饥饿恢复21%；水250ml"},
+  {name:"煮熟的鲱鱼罐头", en:"Cooked Herring", confirmed:true,
+   mats:[["鲱鱼罐头",1]], tool:"平底锅", time:"1:40", unlock:"",
+   note:"饥饿恢复30%"},
+  {name:"煮熟的枫糖燕麦粥", en:"Maple Oatmeal", confirmed:true,
+   mats:[["枫糖燕麦片",1],["水250ml",1]], tool:"锅", time:"0:45", unlock:"",
+   note:"饥饿恢复45%；水250ml"},
+  {name:"煮熟的金枪鱼罐头", en:"Cooked Tuna", confirmed:true,
+   mats:[["金枪鱼罐头",1]], tool:"平底锅", time:"1:40", unlock:"",
+   note:"饥饿恢复30%"},
+  {name:"煮熟的冷冻薯条", en:"Cooked Fries", confirmed:true,
+   mats:[["袋装薯条",1]], tool:"烤盘", time:"8:20", unlock:"",
+   note:"饥饿恢复15%"},
+  {name:"煮熟的苹果燕麦粥", en:"Apple Oatmeal", confirmed:true,
+   mats:[["苹果燕麦片",1],["水250ml",1]], tool:"锅", time:"0:45", unlock:"",
+   note:"饥饿恢复45%；水250ml"},
+  {name:"煮熟的豌豆罐头", en:"Cooked Peas", confirmed:true,
+   mats:[["豌豆罐头",1]], tool:"锅", time:"0:20", unlock:"",
+   note:"饥饿恢复21%"},
+  {name:"煮熟的意面", en:"Cooked Pasta", confirmed:true,
+   mats:[["意面",1],["水250ml",1]], tool:"锅", time:"0:45", unlock:"",
+   note:"饥饿恢复18%；水250ml"},
+  {name:"煮熟的玉米罐头", en:"Cooked Corn", confirmed:true,
+   mats:[["玉米罐头",1]], tool:"锅", time:"0:20", unlock:"",
+   note:"饥饿恢复9%"},
+  {name:"煮熟的原味燕麦粥", en:"Plain Oatmeal", confirmed:true,
+   mats:[["原味燕麦片",1],["水250ml",1]], tool:"锅", time:"0:45", unlock:"",
+   note:"饥饿恢复45%；水250ml"},
+  {name:"抓饭", en:"Pilaf", confirmed:true,
+   mats:[["糙米",1],["大蒜",1],["洋葱",1],["肉汤250ml",1]], tool:"锅/平底锅/烤盘", time:"2:55", unlock:"",
+   note:"饥饿恢复52%；敏捷2.0x；肉汤250ml"},
+  {name:"手(雷)", en:"Hand Grenade", confirmed:true,
+   mats:[["断臂",1],["破片手雷",1]], tool:"锤子", time:"0:10", unlock:"",
+   note:"绑着丧尸残肢的破片手雷，传病毒"},
   {name:"工具箱", en:"Toolbox", confirmed:true,
    mats:[["废木料",5]], tool:"锤子", time:"", unlock:"",
    note:"基地核心，建在守卫严密处"},
@@ -1119,9 +1098,6 @@ const PRESET = [
   {name:"废料存储箱", en:"Scrap Storage Box", confirmed:true,
    mats:[["废塑料",10],["金属支架",5],["螺丝",10],["强化木板",10]], tool:"重型切割工具", time:"", unlock:"",
    note:"建造100/25；专存放废料；维护废木料×1"},
-
-
-  // ---- 建造-专用存储/门窗/围栏 ----
   {name:"木板存储箱", en:"Plank Storage Box", confirmed:true,
    mats:[["金属支架",5],["螺丝",10],["强化木板",10],["强化木杆",4]], tool:"重型切割工具", time:"", unlock:"",
    note:"建造100/25；存普通/强化木板；维护废木料×1"},
@@ -1134,151 +1110,136 @@ const PRESET = [
   {name:"原木存储箱", en:"Log Storage Box", confirmed:true,
    mats:[["金属支架",5],["螺丝",10],["强化木板",8],["强化木杆",4]], tool:"重型切割工具", time:"", unlock:"",
    note:"建造100/25；存原木专用；维护废木料×1"},
-  {name:"窗户(废木料)", en:"Window (Scrap Wood)", confirmed:true,
+  {name:"窗户（普通）（废木料）", en:"Window (Scrap Wood)", confirmed:true,
    mats:[["钉子",5],["废木料",5],["木杆",2]], tool:"", time:"", unlock:"",
    note:"1级废木料；附加材料按面积：钉子×4/sqm+废木料×2/sqm+木板×2/sqm；维护废木料×1"},
-  {name:"窗户(可打开)", en:"Window (Openable)", confirmed:true,
+  {name:"窗户（可打开）（废木料）", en:"Window (Openable)", confirmed:true,
    mats:[["钉子",5],["废木料",5],["金属支架",1],["木杆",2]], tool:"", time:"", unlock:"",
    note:"1级废木料；附加材料按面积：钉子×4/sqm+废木料×3/sqm+木板×2/sqm；维护废木料×1"},
-  {name:"大型门(右)", en:"Large Door (Right)", confirmed:true,
+  {name:"大型门（右）（废木料）", en:"Large Door (Right)", confirmed:true,
    mats:[["钉子",5],["废木料",20],["金属支架",4],["木板",4]], tool:"", time:"", unlock:"",
    note:"1级废木料；维护废木料×1"},
-  {name:"大型门(左)", en:"Large Door (Left)", confirmed:true,
+  {name:"大型门（左）（废木料）", en:"Large Door (Left)", confirmed:true,
    mats:[["钉子",10],["废木料",20],["金属支架",4],["木板",4]], tool:"", time:"", unlock:"",
    note:"1级废木料；维护废木料×1"},
-  {name:"大型围栏门", en:"Large Fence Gate", confirmed:true,
+  {name:"大型围栏门（废木料）", en:"Large Fence Gate", confirmed:true,
    mats:[["钉子",10],["废木料",20],["金属支架",4],["木杆",4]], tool:"", time:"", unlock:"",
    note:"1级废木料；车辆可通过；维护废木料×1"},
-  {name:"门(车库)", en:"Garage Door", confirmed:true,
+  {name:"门（车库）（废木料）", en:"Garage Door", confirmed:true,
    mats:[["钉子",10],["废木料",15],["金属支架",2],["木板",4]], tool:"", time:"", unlock:"",
    note:"1级废木料；附加材料按面积：钉子×2/sqm+废木料×2/sqm+木板×2/sqm；维护废木料×1"},
-  {name:"门(带窗)", en:"Door (Window)", confirmed:true,
+  {name:"门（带窗）（废木料）", en:"Door (Window)", confirmed:true,
    mats:[["钉子",5],["废木料",10],["金属支架",4],["木板",2]], tool:"", time:"", unlock:"",
    note:"1级废木料；维护废木料×1"},
-  {name:"门(实心)", en:"Door (Solid)", confirmed:true,
+  {name:"门（实心）（废木料）", en:"Door (Solid)", confirmed:true,
    mats:[["钉子",5],["废木料",10],["金属支架",2],["木板",2]], tool:"", time:"", unlock:"",
    note:"1级废木料；维护废木料×1"},
-  {name:"围栏", en:"Fence", confirmed:true,
+  {name:"围栏（废木料）", en:"Fence", confirmed:true,
    mats:[["钉子",5],["废木料",10],["木板",4]], tool:"", time:"", unlock:"",
    note:"1级废木料；外部围墙；维护废木料×1"},
-  {name:"围栏门", en:"Fence Gate", confirmed:true,
+  {name:"围栏门（废木料）", en:"Fence Gate", confirmed:true,
    mats:[["钉子",5],["废木料",10],["金属支架",2],["木杆",4]], tool:"", time:"", unlock:"",
    note:"1级废木料；围栏入口；维护废木料×1"},
-  {name:"围栏平台", en:"Fence Platform", confirmed:true,
+  {name:"围栏平台（废木料）", en:"Fence Platform", confirmed:true,
    mats:[["钉子",5],["废木料",10]], tool:"", time:"", unlock:"",
    note:"1级废木料；紧贴围栏可当临时哨塔；维护废木料×1"},
-  {name:"窗户(强化木)", en:"Window (Reinforced Wood)", confirmed:true,
+  {name:"窗户（普通）（强化木）", en:"Window (Reinforced Wood)", confirmed:true,
    mats:[["螺丝",3],["强化木板",1],["强化木杆",1]], tool:"锤子+螺丝刀", time:"", unlock:"",
    note:"2级强化木材；建造100/25；附加材料按面积：螺丝×1/sqm；维护废铁×1"},
-
-
-  // ---- 建造-2级强化木材门窗 ----
-  {name:"窗户(强化木可开)", en:"Window (Reinforced, Openable)", confirmed:true,
+  {name:"窗户（可打开）（强化木）", en:"Window (Reinforced, Openable)", confirmed:true,
    mats:[["金属支架",1],["螺丝",7],["强化木板",3],["强化木杆",1]], tool:"锤子+螺丝刀", time:"", unlock:"",
    note:"2级强化木材；建造100/25；附加材料螺丝×3/sqm；维护废铁×1"},
-  {name:"大型门(右)(强化木)", en:"Large Door R (Reinforced)", confirmed:true,
+  {name:"大型门（右）（强化木）", en:"Large Door R (Reinforced)", confirmed:true,
    mats:[["金属支架",3],["螺丝",18],["强化木板",18],["强化木杆",3]], tool:"锤子+螺丝刀", time:"", unlock:"",
    note:"2级强化木材；建造100/25；维护废铁×1"},
-  {name:"大型门(左)(强化木)", en:"Large Door L (Reinforced)", confirmed:true,
+  {name:"大型门（左）（强化木）", en:"Large Door L (Reinforced)", confirmed:true,
    mats:[["金属支架",3],["螺丝",18],["强化木板",18],["强化木杆",3]], tool:"锤子+螺丝刀", time:"", unlock:"",
    note:"2级强化木材；建造100/25；维护废铁×1"},
-  {name:"大型围栏门(强化木)", en:"Large Fence Gate (Reinforced)", confirmed:true,
+  {name:"大型围栏门（强化木）", en:"Large Fence Gate (Reinforced)", confirmed:true,
    mats:[["金属支架",3],["螺丝",15],["强化木板",12],["强化木杆",3]], tool:"锤子+螺丝刀", time:"", unlock:"",
    note:"2级强化木材；建造100/25；车辆可过；维护废铁×1"},
-  {name:"门(车库)(强化木)", en:"Garage Door (Reinforced)", confirmed:true,
+  {name:"门（车库）（强化木）", en:"Garage Door (Reinforced)", confirmed:true,
    mats:[["金属支架",1],["螺丝",7],["强化木板",7],["强化木杆",1]], tool:"锤子+螺丝刀", time:"", unlock:"",
    note:"2级强化木材；建造100/25；附加材料螺丝×1/sqm；维护废铁×1"},
-  {name:"门(带窗)(强化木)", en:"Door W/Window (Reinforced)", confirmed:true,
+  {name:"门（带窗）（强化木）", en:"Door W/Window (Reinforced)", confirmed:true,
    mats:[["金属支架",3],["螺丝",7],["强化木板",6],["强化木杆",1]], tool:"锤子+螺丝刀", time:"", unlock:"",
    note:"2级强化木材；建造100/25；维护废铁×1"},
-  {name:"门(实心)(强化木)", en:"Door Solid (Reinforced)", confirmed:true,
+  {name:"门（实心）（强化木）", en:"Door Solid (Reinforced)", confirmed:true,
    mats:[["金属支架",1],["螺丝",3],["强化木板",3],["强化木杆",1]], tool:"锤子+螺丝刀", time:"", unlock:"",
    note:"2级强化木材；建造100/25；维护废铁×1"},
-
-
-  // ---- 建造-2级强化木围栏/3级石灰石砖门窗 ----
-  {name:"围栏(强化木)", en:"Fence (Reinforced)", confirmed:true,
+  {name:"围栏（强化木）", en:"Fence (Reinforced)", confirmed:true,
    mats:[["螺丝",7],["强化木板",6],["强化木杆",1]], tool:"锤子+螺丝刀", time:"", unlock:"",
    note:"2级强化木材；建造100/25；外部围墙；维护废铁×1"},
-  {name:"围栏门(强化木)", en:"Fence Gate (Reinforced)", confirmed:true,
+  {name:"围栏门（强化木）", en:"Fence Gate (Reinforced)", confirmed:true,
    mats:[["金属支架",1],["螺丝",7],["强化木板",6],["强化木杆",1]], tool:"锤子+螺丝刀", time:"", unlock:"",
    note:"2级强化木材；建造100/25；维护废铁×1"},
-  {name:"围栏平台(强化木)", en:"Fence Platform (Reinforced)", confirmed:true,
+  {name:"围栏平台（强化木）", en:"Fence Platform (Reinforced)", confirmed:true,
    mats:[["金属支架",1],["螺丝",7],["强化木板",2]], tool:"锤子+螺丝刀", time:"", unlock:"",
    note:"2级强化木材；建造100/25；紧贴围栏当哨塔；维护废铁×1"},
-  {name:"窗户(石灰石砖)", en:"Window (Limestone)", confirmed:true,
+  {name:"窗户（普通）（石灰石砖）", en:"Window (Limestone)", confirmed:true,
    mats:[["螺丝",5],["强化木杆",2],["石灰石砖",5]], tool:"电钻+螺丝刀+重型钳子", time:"", unlock:"",
    note:"3级石灰石砖；建造100/50；附加材料螺丝×8/sqm+强化木杆×1/sqm；维护石灰石粉×2"},
-  {name:"窗户(石灰石砖可开)", en:"Window (Limestone, Openable)", confirmed:true,
+  {name:"窗户（可打开）（石灰石砖）", en:"Window (Limestone, Openable)", confirmed:true,
    mats:[["螺丝",5],["强化金属支架",1],["石灰石砖",5]], tool:"锤子+螺丝刀", time:"", unlock:"",
    note:"3级石灰石砖；建造100/50；附加材料螺丝×4/sqm+强化木板×1/sqm+强化木杆×1/sqm；维护石灰石粉×2"},
-  {name:"大型门(右)(石灰石砖)", en:"Large Door R (Limestone)", confirmed:true,
+  {name:"大型门（右）（石灰石砖）", en:"Large Door R (Limestone)", confirmed:true,
    mats:[["螺丝",10],["强化金属支架",4],["强化木板",4],["石灰石砖",20]], tool:"电钻+螺丝刀+重型钳子", time:"", unlock:"",
    note:"3级石灰石砖；建造100/50；维护石灰石粉×2"},
-  {name:"大型门(左)(石灰石砖)", en:"Large Door L (Limestone)", confirmed:true,
+  {name:"大型门（左）（石灰石砖）", en:"Large Door L (Limestone)", confirmed:true,
    mats:[["螺丝",10],["强化金属支架",4],["强化木板",4],["石灰石砖",20]], tool:"电钻+螺丝刀+重型钳子", time:"", unlock:"",
    note:"3级石灰石砖；建造100/50；维护石灰石粉×2"},
-  {name:"大型围栏门(石灰石砖)", en:"Large Fence Gate (Limestone)", confirmed:true,
+  {name:"大型围栏门（石灰石砖）", en:"Large Fence Gate (Limestone)", confirmed:true,
    mats:[["螺丝",10],["强化金属支架",4],["强化木板",4],["石灰石砖",20]], tool:"电钻+螺丝刀+重型钳子", time:"", unlock:"",
    note:"3级石灰石砖；建造100/50；车辆可过；维护石灰石粉×2"},
-
-
-  // ---- 建造-3级石灰石砖剩余/4级废金属门窗 ----
-  {name:"门(车库)(石灰石砖)", en:"Garage Door (Limestone)", confirmed:true,
+  {name:"门（车库）（石灰石砖）", en:"Garage Door (Limestone)", confirmed:true,
    mats:[["螺丝",10],["强化金属支架",2],["石灰石砖",15]], tool:"电钻+螺丝刀+重型钳子", time:"", unlock:"",
    note:"3级石灰石砖；建造100/50；附加材料螺丝×5/sqm+强化木板×1/sqm+强化木杆×1/sqm+石灰石砖×1/sqm；维护石灰石粉×2"},
-  {name:"门(带窗)(石灰石砖)", en:"Door W/Window (Limestone)", confirmed:true,
+  {name:"门（带窗）（石灰石砖）", en:"Door W/Window (Limestone)", confirmed:true,
    mats:[["螺丝",5],["强化金属支架",4],["强化木板",2],["石灰石砖",10]], tool:"电钻+螺丝刀+重型钳子", time:"", unlock:"",
    note:"3级石灰石砖；建造100/50；维护石灰石粉×2"},
-  {name:"门(实心)(石灰石砖)", en:"Door Solid (Limestone)", confirmed:true,
+  {name:"门（实心）（石灰石砖）", en:"Door Solid (Limestone)", confirmed:true,
    mats:[["螺丝",5],["强化金属支架",2],["强化木板",2],["石灰石砖",10]], tool:"电钻+螺丝刀+重型钳子", time:"", unlock:"",
    note:"3级石灰石砖；建造100/50；维护石灰石粉×2"},
-  {name:"围栏(石灰石砖)", en:"Fence (Limestone)", confirmed:true,
+  {name:"围栏（石灰石砖）", en:"Fence (Limestone)", confirmed:true,
    mats:[["螺丝",5],["强化木板",4],["石灰石砖",10]], tool:"电钻+螺丝刀+重型钳子", time:"", unlock:"",
    note:"3级石灰石砖；建造100/50；外部围墙；维护石灰石粉×2"},
-  {name:"围栏门(石灰石砖)", en:"Fence Gate (Limestone)", confirmed:true,
+  {name:"围栏门（石灰石砖）", en:"Fence Gate (Limestone)", confirmed:true,
    mats:[["螺丝",5],["强化金属支架",2],["强化木杆",4],["石灰石砖",10]], tool:"电钻+螺丝刀+重型钳子", time:"", unlock:"",
    note:"3级石灰石砖；建造100/50；维护石灰石粉×2"},
-  {name:"围栏平台(石灰石砖)", en:"Fence Platform (Limestone)", confirmed:true,
+  {name:"围栏平台（石灰石砖）", en:"Fence Platform (Limestone)", confirmed:true,
    mats:[["螺丝",5],["石灰石砖",10]], tool:"电钻+螺丝刀+重型钳子", time:"", unlock:"",
    note:"3级石灰石砖；建造100/50；紧贴围栏当哨塔；维护石灰石粉×2"},
-  {name:"窗户(废金属)", en:"Window (Scrap Metal)", confirmed:true,
+  {name:"窗户（普通）（废金属）", en:"Window (Scrap Metal)", confirmed:true,
    mats:[["废金属板",2],["废金属管",2],["重型螺栓",5]], tool:"电钻+工业螺丝刀+基础焊机", time:"", unlock:"",
    note:"4级废金属；机械100/50+建造100/70；附加材料小块废金属板×1/sqm+重型螺栓×5/sqm；维护废铁×5"},
-  {name:"窗户(废金属可开)", en:"Window (Scrap Metal, Openable)", confirmed:true,
+  {name:"窗户（可打开）（废金属）", en:"Window (Scrap Metal, Openable)", confirmed:true,
    mats:[["废金属板",2],["废金属管",2],["强化金属支架",1],["重型螺栓",5]], tool:"电钻+工业螺丝刀+基础焊机", time:"", unlock:"",
    note:"4级废金属；机械100/50+建造100/70；附加材料小块废金属板×1/sqm+重型螺栓×5/sqm；维护废铁×5"},
-
-
-  // ---- 建造-4级废金属门窗/围栏 ----
-  {name:"大型门(右)(废金属)", en:"Large Door R (Scrap Metal)", confirmed:true,
+  {name:"大型门（右）（废金属）", en:"Large Door R (Scrap Metal)", confirmed:true,
    mats:[["废金属板",6],["强化金属支架",4],["小块废金属板",4],["重型螺栓",10]], tool:"电钻+工业螺丝刀+基础焊机", time:"", unlock:"",
    note:"4级废金属；机械100/50+建造100/70；维护废铁×5"},
-  {name:"大型门(左)(废金属)", en:"Large Door L (Scrap Metal)", confirmed:true,
+  {name:"大型门（左）（废金属）", en:"Large Door L (Scrap Metal)", confirmed:true,
    mats:[["废金属板",6],["强化金属支架",4],["小块废金属板",4],["重型螺栓",10]], tool:"电钻+工业螺丝刀+基础焊机", time:"", unlock:"",
    note:"4级废金属；机械100/50+建造100/70；维护废铁×5"},
-  {name:"大型围栏门(废金属)", en:"Large Fence Gate (Scrap Metal)", confirmed:true,
+  {name:"大型围栏门（废金属）", en:"Large Fence Gate (Scrap Metal)", confirmed:true,
    mats:[["废金属板",6],["强化金属支架",4],["小块废金属板",4],["重型螺栓",10]], tool:"电钻+工业螺丝刀+基础焊机", time:"", unlock:"",
    note:"4级废金属；机械100/50+建造100/70；车辆可过；维护废铁×5"},
-  {name:"门(车库)(废金属)", en:"Garage Door (Scrap Metal)", confirmed:true,
+  {name:"门（车库）（废金属）", en:"Garage Door (Scrap Metal)", confirmed:true,
    mats:[["废金属板",4],["强化金属支架",2],["小块废金属板",4],["重型螺栓",10]], tool:"电钻+工业螺丝刀+基础焊机", time:"", unlock:"",
    note:"4级废金属；机械100/50+建造100/70；附加材料小块废金属板×2/sqm+重型螺栓×5/sqm；维护废铁×5"},
-  {name:"门(带窗)(废金属)", en:"Door W/Window (Scrap Metal)", confirmed:true,
+  {name:"门（带窗）（废金属）", en:"Door W/Window (Scrap Metal)", confirmed:true,
    mats:[["废金属板",2],["强化金属支架",4],["小块废金属板",4],["重型螺栓",5]], tool:"电钻+工业螺丝刀+基础焊机", time:"", unlock:"",
    note:"4级废金属；机械100/50+建造100/70；维护废铁×5"},
-  {name:"门(实心)(废金属)", en:"Door Solid (Scrap Metal)", confirmed:true,
+  {name:"门（实心）（废金属）", en:"Door Solid (Scrap Metal)", confirmed:true,
    mats:[["废金属板",2],["强化金属支架",2],["小块废金属板",4],["重型螺栓",5]], tool:"电钻+工业螺丝刀+基础焊机", time:"", unlock:"",
    note:"4级废金属；机械100/50+建造100/70；维护废铁×5"},
-  {name:"围栏(废金属)", en:"Fence (Scrap Metal)", confirmed:true,
+  {name:"围栏（废金属）", en:"Fence (Scrap Metal)", confirmed:true,
    mats:[["废金属板",2],["小块废金属板",4],["重型螺栓",5]], tool:"电钻+工业螺丝刀+基础焊机", time:"", unlock:"",
    note:"4级废金属；机械100/50+建造100/70；外部围墙；维护废铁×5"},
-  {name:"围栏门(废金属)", en:"Fence Gate (Scrap Metal)", confirmed:true,
+  {name:"围栏门（废金属）", en:"Fence Gate (Scrap Metal)", confirmed:true,
    mats:[["废金属板",2],["废金属管",2],["强化金属支架",4],["重型螺栓",5]], tool:"电钻+工业螺丝刀+基础焊机", time:"", unlock:"",
    note:"4级废金属；机械100/50+建造100/70；维护废铁×5"},
-
-
-  // ---- 建造-工作台/精炼设施 ----
-  {name:"围栏平台(废金属)", en:"Fence Platform (Scrap Metal)", confirmed:true,
+  {name:"围栏平台（废金属）", en:"Fence Platform (Scrap Metal)", confirmed:true,
    mats:[["废金属板",2],["重型螺栓",5]], tool:"电钻+工业螺丝刀+基础焊机", time:"", unlock:"",
    note:"4级废金属；机械100/50+建造100/70；紧贴围栏当临时哨塔；维护废铁×3"},
   {name:"标准工作台", en:"Standard Workbench", confirmed:true,
@@ -1302,9 +1263,6 @@ const PRESET = [
   {name:"工业级熔炉", en:"Industrial Furnace", confirmed:true,
    mats:[["废金属管",2],["强化金属支架",4],["小块废金属板",12],["重型螺栓",15]], tool:"基础焊机", time:"", unlock:"",
    note:"机械100/55+建造100/75；双槽位，高温加工钢材；维护铁锭×1"},
-
-
-  // ---- 建造-精炼设施/烹饪/舒适 ----
   {name:"简易炭窑", en:"Simple Charcoal Kiln", confirmed:true,
    mats:[["螺丝",15],["强化金属支架",4],["石灰石砖",20]], tool:"电动螺丝刀", time:"", unlock:"",
    note:"机械100/25+建造100/50；原木→木炭；维护粗石灰石×1"},
@@ -1329,9 +1287,6 @@ const PRESET = [
   {name:"床垫", en:"Mattress", confirmed:true,
    mats:[["弹簧",10],["废布料",20]], tool:"基础钳子", time:"", unlock:"",
    note:"睡觉用；维护废布料×1"},
-
-
-  // ---- 建造-照明/属性训练/种植 ----
   {name:"蜡烛", en:"Candle", confirmed:true,
    mats:[["蜡块",2],["线材",1]], tool:"", time:"", unlock:"",
    note:"照明"},
@@ -1347,34 +1302,31 @@ const PRESET = [
   {name:"引体向上杆", en:"Pull-up Bar", confirmed:true,
    mats:[["废金属管",1],["螺丝",5]], tool:"电钻", time:"", unlock:"",
    note:"建造100/65+力量87/25；核心锻炼增加力量经验值；维护废铁×1"},
-  {name:"陶罐(样式1)", en:"Clay Pot (Style 1)", confirmed:true,
+  {name:"陶罐（样式1）", en:"Clay Pot (Style 1)", confirmed:true,
    mats:[["胶水瓶",1],["碎玻璃",5]], tool:"锤子", time:"", unlock:"",
    note:"可种植单株小型作物；维护碎玻璃×1"},
-  {name:"陶罐(样式2)", en:"Clay Pot (Style 2)", confirmed:true,
+  {name:"陶罐（样式2）", en:"Clay Pot (Style 2)", confirmed:true,
    mats:[["胶水瓶",1],["碎玻璃",5]], tool:"锤子", time:"", unlock:"",
    note:"可种植单株小型作物；维护碎玻璃×1"},
-  {name:"单株种植盆(样式1)", en:"Single Planter (Style 1)", confirmed:true,
+  {name:"单株种植盆（样式1）", en:"Single Planter (Style 1)", confirmed:true,
    mats:[["钉子",5],["木板",5]], tool:"锤子", time:"", unlock:"",
    note:"可种植单株中型作物；维护废木料×1"},
-
-
-  // ---- 建造-种植箱/堆肥/雨水收集 ----
-  {name:"小型种植箱(样式1)", en:"Small Planter Box (Style 1)", confirmed:true,
+  {name:"小型种植箱（样式1）", en:"Small Planter Box (Style 1)", confirmed:true,
    mats:[["钉子",10],["木板",10]], tool:"锤子", time:"", unlock:"",
    note:"可种植作物；维护废木料×1"},
-  {name:"小型种植箱(样式2)", en:"Small Planter Box (Style 2)", confirmed:true,
+  {name:"小型种植箱（样式2）", en:"Small Planter Box (Style 2)", confirmed:true,
    mats:[["钉子",10],["木板",10]], tool:"锤子", time:"", unlock:"",
    note:"可种植作物；维护废木料×1"},
-  {name:"中型种植箱(样式1)", en:"Medium Planter Box (Style 1)", confirmed:true,
+  {name:"中型种植箱（样式1）", en:"Medium Planter Box (Style 1)", confirmed:true,
    mats:[["钉子",15],["木板",15]], tool:"锤子", time:"", unlock:"",
    note:"建造100/15+求生41/10；可种植作物；维护废木料×1"},
-  {name:"中型种植箱(样式2)", en:"Medium Planter Box (Style 2)", confirmed:true,
+  {name:"中型种植箱（样式2）", en:"Medium Planter Box (Style 2)", confirmed:true,
    mats:[["钉子",15],["木板",15]], tool:"锤子", time:"", unlock:"",
    note:"建造100/5；可种植作物；维护废木料×1"},
-  {name:"大型种植箱(样式1)", en:"Large Planter Box (Style 1)", confirmed:true,
+  {name:"大型种植箱（样式1）", en:"Large Planter Box (Style 1)", confirmed:true,
    mats:[["钉子",20],["木板",20]], tool:"锤子", time:"", unlock:"",
    note:"建造100/20+求生41/35；可种植作物；维护废木料×1"},
-  {name:"大型种植箱(样式2)", en:"Large Planter Box (Style 2)", confirmed:true,
+  {name:"大型种植箱（样式2）", en:"Large Planter Box (Style 2)", confirmed:true,
    mats:[["钉子",20],["木板",20]], tool:"锤子", time:"", unlock:"",
    note:"建造100/20+求生41/35；可种植作物；维护废木料×1"},
   {name:"堆肥箱", en:"Compost Bin", confirmed:true,
@@ -1383,9 +1335,6 @@ const PRESET = [
   {name:"隔热雨水收集器", en:"Insulated Rain Collector", confirmed:true,
    mats:[["废金属板",4],["螺丝",10],["强化木板",5],["塑料桶",3]], tool:"工业订书枪+工业螺丝刀", time:"", unlock:"",
    note:"建造100/65；收集雨水，需室外；液体不会结冰；维护废铁×3"},
-
-
-  // ---- 建造-液体/温控/电力 ----
   {name:"简易洒水器", en:"Simple Sprinkler", confirmed:true,
    mats:[["废塑料",25],["螺丝",10],["强化木板",5]], tool:"基础订书机+重型钳子", time:"", unlock:"",
    note:"机械100/15+建造100/35；自动洒水浇灌植物；维护废塑料×1"},
@@ -1410,9 +1359,6 @@ const PRESET = [
   {name:"简易电池", en:"Simple Battery", confirmed:true,
    mats:[["废金属管",4],["汽车电瓶",3],["小块废金属板",4],["元件",8]], tool:"电动螺丝刀+焊接工具", time:"", unlock:"",
    note:"电工97/15+机械100/50+建造100/60；蓄电池储电供电；维护电子废料×1"},
-
-
-  // ---- 建造-电力/监控/接口/照明 ----
   {name:"简易风车", en:"Simple Windmill", confirmed:true,
    mats:[["高级铁锭",10],["高级元件",15],["割草机刀片",4],["铜线圈",10],["橡胶皮带",2]], tool:"工业螺丝刀+焊接工具+基础焊机", time:"", unlock:"",
    note:"电工97/50+机械100/75+建造100/80；风力发电；维护铁锭×1"},
@@ -1437,9 +1383,6 @@ const PRESET = [
   {name:"泛光灯", en:"Floodlight", confirmed:true,
    mats:[["灯泡",2],["螺丝",5],["塑料外壳",2],["铜线圈",2]], tool:"电动螺丝刀", time:"", unlock:"",
    note:"机械100/25+建造100/55；提供单向照明；维护废塑料×1"},
-
-
-  // ---- 建造-照明/杂项/防御工事 ----
   {name:"荧光灯", en:"Fluorescent Light", confirmed:true,
    mats:[["灯泡",2],["螺丝",5],["塑料外壳",2],["铜线圈",2]], tool:"电动螺丝刀", time:"", unlock:"",
    note:"机械100/25+建造100/55；提供顶部照明；维护废塑料×1"},
@@ -1452,9 +1395,6 @@ const PRESET = [
   {name:"围栏带刺铁丝", en:"Fence Barbed Wire", confirmed:true,
    mats:[["螺丝",5],["铁丝网",2]], tool:"锤子", time:"", unlock:"",
    note:"机械100/5+建造100/35；可安装在围栏上，攀爬会受伤；粗制类防御设施；维护螺丝×1"},
-
-
-  // ---- 精炼/冶炼链（截图确认） ----
   {name:"石灰石砖", en:"Limestone Brick", confirmed:true,
    mats:[["混凝土浆",2]], tool:"", time:"0:02", unlock:"",
    note:"3级建筑材质；建造防御工事"},
@@ -1476,8 +1416,6 @@ const PRESET = [
   {name:"精炼木炭", en:"Refined Charcoal", confirmed:true,
    mats:[["木炭",1]], tool:"高级炭窑", time:"1:30", unlock:"",
    note:"窑炉精炼木炭；燃烧温度远高于普通木炭"},
-
-  // ---- 汽车零件拆卸工具需求 ----
   {name:"四季轮胎", en:"All-season Tire", confirmed:true,
    mats:[], tool:"电动螺丝刀+扳手", time:"", unlock:"",
    note:"汽车零件拆卸（车轮）；从LODESTAR CARRIER等车上拆取" },
@@ -1505,8 +1443,6 @@ const PRESET = [
   {name:"发动机进气歧管", en:"Intake Manifold", confirmed:true,
    mats:[], tool:"工业级切割工具+工业级螺丝刀+锤子+扳手", time:"", unlock:"",
    note:"汽车零件拆卸（发动机）；从LODESTAR CARRIER等车上拆取" },
-
-  // ---- 原材料（草药/搜刮） ----
   {name:"毛蕊花", en:"Mullein", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，采集；磨碎后用"},
   {name:"巨型猪草", en:"Giant Hogweed", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，采集"},
   {name:"美味牛肝菌", en:"Porcini", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，采集蘑菇"},
@@ -1522,15 +1458,12 @@ const PRESET = [
   {name:"动物血液", en:"Animal Blood", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，打猎；血粉原料"},
   {name:"异丙醇", en:"Isopropyl Alcohol", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮药店/医院；绷带/湿巾要用"},
   {name:"胶带", en:"Tape", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮；创伤绷带/夹板要用"},
-  {name:"啤酒瓶", en:"Beer Bottle", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮酒吧/垃圾堆；注射器原料"},
-
-  {name:"简易绷带", en:"Makeshift Bandage", confirmed:true,
-   mats:[["废布料",2],["布绳",2]], tool:"", time:"0:05", unlock:"初期",
-   note:"自制绷带；弹力绷带原料"},
+  {name:"啤酒瓶", en:"Beer Bottle", confirmed:false, mats:[], tool:"", time:"", unlock:"", note:"原材料，搜刮酒吧/垃圾堆；注射器原料"}
 ];
 
 const LS_KEY = "vein_recipes_user";
 const qtyState = {};
+const treeOpen = {};
 let userRecipes = [];
 try { userRecipes = JSON.parse(localStorage.getItem(LS_KEY) || "[]"); } catch(e){ userRecipes=[]; }
 
@@ -1544,12 +1477,28 @@ function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;")
 function render(){
   const q = searchEl.value.trim().toLowerCase();
   const all = PRESET.concat(userRecipes);
-  const list = q ? all.filter(it =>
-    it.name.toLowerCase().includes(q) ||
-    (it.en||"").toLowerCase().includes(q)
-  ) : all;
+  let list;
+  if(q){
+    list = all.filter(it =>
+      it.name.toLowerCase().includes(q) ||
+      (it.en||"").toLowerCase().includes(q)
+    );
+    // 排序：精确匹配 > 开头匹配 > 包含匹配
+    list.sort((a,b)=>{
+      const an = a.name.toLowerCase(), bn = b.name.toLowerCase();
+      const aExact = an === q, bExact = bn === q;
+      if(aExact && !bExact) return -1;
+      if(bExact && !aExact) return 1;
+      const aStart = an.startsWith(q), bStart = bn.startsWith(q);
+      if(aStart && !bStart) return -1;
+      if(bStart && !aStart) return 1;
+      return an.length - bn.length; // 短的排前面
+    });
+  } else {
+    list = all;
+  }
 
-  grid.innerHTML = list.map(it => {
+  const renderCard = (it) => {
     const cls = it.user ? "pending" : (it.confirmed ? "confirmed" : "pending");
     const badge = it.user ? '<span class="badge user">我的录入</span>'
                  : it.confirmed ? '<span class="badge ok">材料已确认</span>'
@@ -1576,28 +1525,31 @@ function render(){
       ? `<div class="qtyrow">做 <input type="number" class="qty" min="1" value="${qty}" data-card="${esc(it.name)}"> 个</div><div class="mats">${directMatsHtml}</div>`
       : `<div class="mats">${directMatsHtml}</div>`;
 
-    // 树状层级展开
     let treeHtml = "";
     if(it.mats.length){
-      const buildTree = (nm, n, depth) => {
+      const buildTree = (nm, n, depth, prefix) => {
         const rec = recipeMap[nm];
         if(!rec || !rec.mats || !rec.mats.length) return "";
         let out = "";
-        rec.mats.forEach(([mc,cnt])=>{
+        rec.mats.forEach(([mc,cnt], idx)=>{
           const total = cnt*n;
           const subRec = recipeMap[mc];
           const hasSub = subRec && subRec.mats && subRec.mats.length;
-          out += `<div class="tree-row" style="padding-left:${depth*18}px">`;
-          out += `<span class="tree-line">${hasSub ? "├─ " : "└─ "}</span>`;
-          out += `<span class="tree-name">${esc(mc)}</span><b class="tree-qty">×${total}</b>`;
+          const isLast = idx === rec.mats.length - 1;
+          const connector = isLast ? "└─" : "├─";
+          out += `<div class="tree-row">`;
+          out += `<span class="tree-prefix">${prefix}${connector}</span><span class="tree-name"> ${esc(mc)}</span><b class="tree-qty">×${total}</b>`;
           if(hasSub) out += `<span class="tree-tool">（${esc(subRec.tool||"")}）</span>`;
           out += `</div>`;
-          if(hasSub) out += buildTree(mc, total, depth+1);
+          if(hasSub){
+            const nextPrefix = prefix + (isLast ? "  " : "│ ");
+            out += buildTree(mc, total, depth+1, nextPrefix);
+          }
         });
         return out;
       };
-      const tree = buildTree(it.name, qty, 0);
-      if(tree) treeHtml = `<div class="label">层级拆解</div><div class="treebox">${tree}</div>`;
+      const tree = buildTree(it.name, qty, 0, "");
+      if(tree) treeHtml = `<div class="tree-toggle${treeOpen[it.name]?" open":""}" data-tree="1">层级拆解</div><div class="treebox${treeOpen[it.name]?" show":""}">${tree}</div>`;
     }
 
     let rawHtml = "";
@@ -1613,7 +1565,7 @@ function render(){
     const toolHtml = it.tool ? `<div class="label">需要工具</div><div class="tool"><b>${esc(it.tool)}</b></div>` : "";
     const timeHtml = it.time ? `<span>时间 ${esc(it.time)}</span>` : "";
     const unlockHtml = it.unlock ? `<span>${esc(it.unlock)}</span>` : "";
-    const noteHtml = it.note ? `<div class="label">备注</div><div style="font-size:12px;color:var(--dim)">${esc(it.note)}</div>` : "";
+    const noteHtml = it.note ? `<div class="label">备注</div><div style="font-size:11px;color:var(--dim)">${esc(it.note)}</div>` : "";
     const delHtml = it.user ? `<br><button class="del" data-del="${esc(it.name)}">删除这条录入</button>` : "";
     return `<div class="card ${cls}">
       <div class="cardhead">
@@ -1628,7 +1580,90 @@ function render(){
       <div class="meta">${timeHtml}${unlockHtml}</div>
       ${noteHtml}${delHtml}
     </div>`;
-  }).join("");
+  };
+
+  // 分类顺序和映射
+  const CAT_ORDER = ["标准零件","高级零件","组装零件","原材料","小工具","燃料","求生","医疗","烹饪","武器","泡煮","削切",
+    "杂项","装饰建筑","客厅","厨房","车库棚屋","储液容器","板条箱","板条箱货架","专用存储",
+    "1级门窗围栏","2级门窗围栏","3级门窗围栏","4级门窗围栏",
+    "工作台","精炼设施","烹饪设施","舒适","照明","属性训练","种植","液体","温控","电力","监控","接口","粗制防御",
+    "其他"];
+  const CAT_MAP = {
+    "布绳":"标准零件","金属支架":"标准零件","钉子":"标准零件","木板":"标准零件","强化木板":"标准零件","螺丝":"标准零件","木杆":"标准零件","强化木杆":"标准零件",
+    "冰箱压缩机":"高级零件","弹簧":"高级零件","电容器":"高级零件","放大器":"高级零件","高级铝箔":"高级零件","高级元件":"高级零件","混凝土浆":"高级零件","炉灶加热元件":"高级零件",
+    "铝土矿粉":"高级零件","强化金属支架":"高级零件","石灰石粉":"高级零件","塑料外壳":"高级零件","铁丝网":"高级零件","铜线捆":"高级零件","元件":"高级零件","简易绝缘板":"高级零件",
+    "水晶":"组装零件","发动机正时皮带":"组装零件","玻璃粉":"组装零件","石墨粉":"组装零件","重型螺栓":"组装零件","大型透镜":"组装零件","橡胶皮带":"组装零件","橡胶卷":"组装零件",
+    "废金属管":"组装零件","废金属板":"组装零件","小块废金属板":"组装零件","高级铁锭":"组装零件","高级钢锭":"组装零件","木炭":"组装零件","焦炭":"组装零件","精炼木炭":"组装零件",
+    "废铝":"原材料","废铁":"原材料","废塑料":"原材料","原木":"原材料","铁锭":"原材料","铜锭":"原材料","铝锭":"原材料","塑料锭":"原材料",
+    "粗铝土矿":"原材料","粗石灰石":"原材料","粗石墨":"原材料","废橡胶":"原材料","废木料":"原材料","电子废料":"原材料","珠宝废料":"原材料",
+    "动物血液":"原材料","骨头":"原材料","报纸":"原材料","废纸":"原材料","手机":"原材料","胶带":"原材料","啤酒瓶":"原材料","毛蕊花":"原材料","艾草":"原材料",
+    "鼠尾草":"原材料","女巫帽菌":"原材料","紫草":"原材料","野蒜":"原材料","野姜":"原材料","著草":"原材料","异丙醇":"原材料",
+    "引火物":"燃料","锯末":"燃料",
+    "血粉":"求生","磨碎的毛蕊花":"求生","磨碎的巨型猪草":"求生","磨碎的美味牛肝菌":"求生","磨碎的艾草":"求生","磨碎的紫松果菊":"求生",
+    "磨碎的鼠尾草":"求生","磨碎的女巫帽菌":"求生","紫草药膏":"求生","野蒜药膏":"求生","野姜药膏":"求生","著草药膏":"求生","骨粉":"求生",
+    "创伤绷带":"医疗","弹力绷带":"医疗","加压绷带":"医疗","简易绷带":"医疗","简易夹板":"医疗","清洁湿巾":"医疗","血型检测包":"医疗","医用夹板":"医疗",
+    "针线":"医疗","注射器":"医疗","缝衣针":"医疗","线材":"医疗",
+    "开水":"泡煮","肉汤":"泡煮","咖啡":"泡煮","食用油":"泡煮","热巧克力":"泡煮","枫糖浆":"泡煮","茶":"泡煮","毛蕊花茶":"泡煮","巨型猪草茶":"泡煮","艾草茶":"泡煮",
+    "紫松果菊茶":"泡煮","鼠尾草茶":"泡煮","植物脂肪":"泡煮",
+    "南瓜灯":"削切","苹果片":"削切","面包片":"削切","哈密瓜片":"削切","胡萝卜片":"削切","黄瓜片":"削切","柠檬片":"削切","青柠片":"削切","披萨片":"削切","番茄片":"削切","西瓜片":"削切",
+  };
+  function classify(name){
+    if(CAT_MAP[name]) return CAT_MAP[name];
+    if(/木矛|棒球棍|弓|箭|手雷|手\(雷\)|炸弹|火药|碎瓶|利齿剑|工兵铲|钉头锤|钉刺|长矛/.test(name)) return "武器";
+    if(/饭|汤|面包|蛋糕|曲奇|甜甜圈|披萨|通心粉|意面|粥|酱|烤|煎|炒|煮|炖|炸|蒸|焗|卷|饼|排|肠|蛋|牛|猪|鸡|鱼|虾|蟹|贝|菇|菜|果|薯|玉米|南瓜|土豆|番茄|洋葱|胡萝卜|西兰花|卷心菜|热狗|汉堡|三明治|华夫|玛芬|贝果|布朗尼|抓饭|什锦|鱼子酱|黄油|奶酪|巧克力|枫糖|燕麦|糙米|罐装|罐头|果酱|牛肝菌|龙虾|章鱼|扇贝|生蚝|贻贝|鲱鱼|金枪鱼|豌豆|鹅肝|咸派|毛血旺|天妇罗|米饭/.test(name)) return "烹饪";
+    if(/汽车|载具|发动机|轮胎|电瓶|底盘|火花塞|进气歧管|滤清器|刹车/.test(name)) return "小工具";
+    // 建造子分类
+    if(/工具柜|工具箱/.test(name)) return "杂项";
+    if(/木条板|木阁楼|塑料阁楼|支撑梁/.test(name)) return "装饰建筑";
+    if(/茶几|电视柜/.test(name)) return "客厅";
+    if(/餐椅/.test(name)) return "厨房";
+    if(/工具桌|杂物堆/.test(name)) return "车库棚屋";
+    if(/储液桶/.test(name)) return "储液容器";
+    if(/小板条箱|大板条箱/.test(name)) return "板条箱";
+    if(/废金属置物架|强化木木架/.test(name)) return "板条箱货架";
+    if(/废料存储箱|木板存储箱|文件架|钥匙架|原木存储箱/.test(name)) return "专用存储";
+    if(/废木料/.test(name)) return "1级门窗围栏";
+    if(/强化木/.test(name)) return "2级门窗围栏";
+    if(/石灰石砖/.test(name)) return "3级门窗围栏";
+    if(/废金属/.test(name) && /门|窗|围栏/.test(name)) return "4级门窗围栏";
+    if(/工作台/.test(name)) return "工作台";
+    if(/熔炉|炭窑|晾干架|锯木机|矿石粉碎机/.test(name)) return "精炼设施";
+    if(/篝火/.test(name)) return "烹饪设施";
+    if(/床垫/.test(name)) return "舒适";
+    if(/蜡烛|泛光灯|荧光灯|灯泡/.test(name)) return "照明";
+    if(/车辆跳板|篮筐|射击靶|引体向上/.test(name)) return "属性训练";
+    if(/陶罐|种植盆|种植箱|堆肥箱/.test(name)) return "种植";
+    if(/雨水收集|洒水器|水井/.test(name)) return "液体";
+    if(/冰柜|冰箱|取暖器/.test(name)) return "温控";
+    if(/充电站|电池|风车|太阳能|发电机/.test(name)) return "电力";
+    if(/摄像头/.test(name)) return "监控";
+    if(/扩展接口/.test(name)) return "接口";
+    if(/带刺铁丝/.test(name)) return "粗制防御";
+    if(/锁|打火机|锅|锯|焊丝|螺丝刀|订书|记事本|剪刀|烤盘|枪钉|钳|锤|无线电|手电筒|望远镜|水袋|研钵|羊角锤|鱼钩|鱼线|圆锯片|指南针|钻头|GPS|遥控|玻璃碗|收音机/.test(name)) return "小工具";
+    if(/箱|柜|桌|椅|床|门|窗|墙|地板|屋顶|围栏|塔|台|架|灯|炉|灶|烤箱|淋浴|马桶|水槽|沙发|储物|种植|堆肥|雨水|水井|洒水|电线|插座|开关|警报|板|砖|柱|梁|梯|地基|阁楼|茶几|杂物|储液|篮筐|靶|垃圾桶|气象仪|玻璃纤维|玻璃板/.test(name)) return "其他";
+    return "其他";
+  }
+
+  let html = "";
+  if(q){
+    html = `<div class="search-results">${list.map(renderCard).join("")}</div>`;
+  } else {
+    const grouped = {};
+    list.forEach(it=>{
+      const c = classify(it.name);
+      if(!grouped[c]) grouped[c] = [];
+      grouped[c].push(it);
+    });
+    CAT_ORDER.forEach(cat=>{
+      if(!grouped[cat]) return;
+      html += `<div class="cat-block"><div class="cat-title">${cat}<span>${grouped[cat].length}</span></div><div class="cards">${grouped[cat].map(renderCard).join("")}</div></div>`;
+    });
+    Object.keys(grouped).forEach(cat=>{
+      if(CAT_ORDER.includes(cat)) return;
+      html += `<div class="cat-block"><div class="cat-title" style="border-left-color:var(--accent2);color:var(--accent2)">${cat}<span>${grouped[cat].length}</span></div><div class="cards">${grouped[cat].map(renderCard).join("")}</div></div>`;
+    });
+  }
+  grid.innerHTML = html;
 
   emptyEl.style.display = list.length ? "none" : "block";
   countEl.textContent = `共 ${list.length} 条`;
@@ -1646,6 +1681,19 @@ function render(){
       render();
       const ni = document.querySelector(`.qty[data-card="${CSS.escape(inp.dataset.card)}"]`);
       if(ni){ ni.focus(); ni.value = qtyState[inp.dataset.card]; ni.select(); }
+    });
+  });
+  grid.querySelectorAll(".tree-toggle").forEach(t=>{
+    t.addEventListener("click", ()=>{
+      t.classList.toggle("open");
+      const box = t.nextElementSibling;
+      if(box) box.classList.toggle("show");
+      // 找到所属卡片名
+      const card = t.closest(".card");
+      if(card){
+        const name = card.querySelector(".name").textContent;
+        treeOpen[name] = t.classList.contains("open");
+      }
     });
   });
 }
@@ -1681,9 +1729,88 @@ searchEl.addEventListener("input", render);
 render();
 </script>
 </div>
+</div><!-- /recipeTab -->
+
+<div id="skillsTab" style="display:none;padding:20px;max-width:900px;margin:0 auto">
+  <h2 style="color:#e8963a;margin-bottom:16px">技能属性</h2>
+  <p style="color:#a89880;font-size:13px;margin-bottom:16px">技能上限100级，每25级1个技能点。推荐职业：窃贼。推荐开局点：拆解、开锁、搜寻。</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px">
+    <div style="background:#332b22;border:1px solid #4a3f30;border-left:3px solid #e8963a;padding:12px"><b style="color:#e8963a">敏捷</b><br><span style="color:#a89880;font-size:12px">耐力上限及消耗。升级：跑步、跳跃、健身</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;border-left:3px solid #e8963a;padding:12px"><b style="color:#e8963a">建造</b><br><span style="color:#a89880;font-size:12px">建造高级建筑。升级：建防御建筑</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;border-left:3px solid #e8963a;padding:12px"><b style="color:#e8963a">烹饪</b><br><span style="color:#a89880;font-size:12px">学习高级食谱。升级：做饭</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;border-left:3px solid #e8963a;padding:12px"><b style="color:#e8963a">制作</b><br><span style="color:#a89880;font-size:12px">高级手工物品，影响读图纸。升级：制造物品</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;border-left:3px solid #e8963a;padding:12px"><b style="color:#e8963a">拆解</b><br><span style="color:#a89880;font-size:12px">提高拆解产出。升级：拆解物品</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;border-left:3px solid #e8963a;padding:12px"><b style="color:#e8963a">驾驶</b><br><span style="color:#a89880;font-size:12px">车辆速度操控。升级：开车</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;border-left:3px solid #e8963a;padding:12px"><b style="color:#e8963a">电工</b><br><span style="color:#a89880;font-size:12px">短接车辆、造电力物品。升级：短接车、造电子品。注意：戴橡胶手套防触电</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;border-left:3px solid #e8963a;padding:12px"><b style="color:#e8963a">农耕</b><br><span style="color:#a89880;font-size:12px">种植作物及产出。升级：种菜</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;border-left:3px solid #e8963a;padding:12px"><b style="color:#e8963a">开锁</b><br><span style="color:#a89880;font-size:12px">开高级锁。25级开坚固锁，75级非常坚固锁。升级：反复撬锁</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;border-left:3px solid #e8963a;padding:12px"><b style="color:#e8963a">机械</b><br><span style="color:#a89880;font-size:12px">制造高级物品设备。升级：造机械</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;border-left:3px solid #e8963a;padding:12px"><b style="color:#e8963a">医疗</b><br><span style="color:#a89880;font-size:12px">治疗能力。升级：治疗</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;border-left:3px solid #e8963a;padding:12px"><b style="color:#e8963a">维修</b><br><span style="color:#a89880;font-size:12px">维修工具武器。升级：修东西</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;border-left:3px solid #e8963a;padding:12px"><b style="color:#e8963a">搜寻</b><br><span style="color:#a89880;font-size:12px">寻找稀有资源。升级：搜刮物资</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;border-left:3px solid #e8963a;padding:12px"><b style="color:#e8963a">潜行</b><br><span style="color:#a89880;font-size:12px">隐蔽能力。升级：潜行</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;border-left:3px solid #e8963a;padding:12px"><b style="color:#e8963a">力量</b><br><span style="color:#a89880;font-size:12px">负重、近战伤害、击退，影响搬家具距离。升级：近战、健身、负重走</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;border-left:3px solid #e8963a;padding:12px"><b style="color:#e8963a">投掷</b><br><span style="color:#a89880;font-size:12px">手雷和抛竿距离。升级：扔手雷、钓鱼</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;border-left:3px solid #e8963a;padding:12px"><b style="color:#e8963a">活力</b><br><span style="color:#a89880;font-size:12px">血量上限防御，降低骨折跌落伤害。升级：健身</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;border-left:3px solid #e8963a;padding:12px"><b style="color:#e8963a">武器</b><br><span style="color:#a89880;font-size:12px">枪支操作能力。升级：用枪</span></div>
+  </div>
+</div>
+
+<div id="survivalTab" style="display:none;padding:20px;max-width:900px;margin:0 auto">
+  <h2 style="color:#e8963a;margin-bottom:16px">生存医疗</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px">
+    <div style="background:#332b22;border:1px solid #4a3f30;padding:12px"><b style="color:#e8963a">基础需求</b><br><span style="color:#a89880;font-size:12px">吃饭、喝水、睡觉、洗澡、洗衣服、擦干。手机会坏，过冬危险</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;padding:12px"><b style="color:#e8963a">精神压力</b><br><span style="color:#a89880;font-size:12px">宅家注意、抑郁药缓解、读书、喝酒</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;padding:12px"><b style="color:#e8963a">疼痛处理</b><br><span style="color:#a89880;font-size:12px">止痛药、缝合、夹板、烧伤膏、绷带、羽绒服保暖、烤火取暖</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;padding:12px"><b style="color:#e8963a">受伤处理</b><br><span style="color:#a89880;font-size:12px">几率感染、喝脏水、腐烂食物、炸肺。伤口需消毒，各种药品</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;padding:12px"><b style="color:#e8963a">疾病</b><br><span style="color:#a89880;font-size:12px">感冒→感冒药；感染→抗生素；丧尸病毒→要变丧尸，必死</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;padding:12px"><b style="color:#e8963a">气味</b><br><span style="color:#a89880;font-size:12px">气味吸引丧尸，恶臭导致生病。可抽血输血</span></div>
+  </div>
+</div>
+
+<div id="toolsTab" style="display:none;padding:20px;max-width:900px;margin:0 auto">
+  <h2 style="color:#e8963a;margin-bottom:8px">工具等级</h2>
+  <p style="color:#a89880;font-size:13px;margin-bottom:16px">任何拆解、制作、建造、修理都需要工具，包括开罐头。工具向下兼容，越高级越省事，拿一个就行。液压工具用专用重型锂电池，其他用锂电池。</p>
+  <div style="display:grid;gap:8px">
+    <div style="background:#332b22;border:1px solid #4a3f30;padding:12px"><b style="color:#e8963a">切割工具类</b><br><span style="color:#a89880;font-size:12px">1级基本：剪刀/切肉刀/面包刀 → 2级重型：钢锯/断线钳/战斧 → 3级电动：圆锯/曲线锯 → 4级工业：研磨机 → 5级液压：液压切割机</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;padding:12px"><b style="color:#e8963a">钻类</b><br><span style="color:#a89880;font-size:12px">1级电动：冲击钻 → 2级工业：工业钻（能换批头的电钻可当螺丝刀）→ 3级液压：液压驱动器</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;padding:12px"><b style="color:#e8963a">锤类</b><br><span style="color:#a89880;font-size:12px">1级基本：羊角锤 → 2级重型：大锤/迷你大锤</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;padding:12px"><b style="color:#e8963a">钳子类</b><br><span style="color:#a89880;font-size:12px">1级基本：活口钳/组合钳 → 2级重型：管钳/锁紧钳</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;padding:12px"><b style="color:#e8963a">螺丝刀类</b><br><span style="color:#a89880;font-size:12px">1级基本：一字/十字 → 2级电动：电动螺丝刀 → 3级工业：工业钻 → 4级液压：液压驱动器</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;padding:12px"><b style="color:#e8963a">焊接类</b><br><span style="color:#a89880;font-size:12px">1级基本：便携焊机/电烙铁 → 2级工业：工业焊机</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;padding:12px"><b style="color:#e8963a">钉类</b><br><span style="color:#a89880;font-size:12px">1级基本：订书机 → 2级工业：钉枪 → 3级重型：重型钉枪</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;padding:12px"><b style="color:#e8963a">专用类</b><br><span style="color:#a89880;font-size:12px">挖掘/挖矿/伐木：镐、改进型镐、铲子、斧头</span></div>
+  </div>
+</div>
+
+<div id="gunsTab" style="display:none;padding:20px;max-width:900px;margin:0 auto">
+  <h2 style="color:#e8963a;margin-bottom:16px">枪械弹药</h2>
+  <p style="color:#a89880;font-size:13px;margin-bottom:16px">配件少：手枪消音器、步枪消音器、垂直握把、红点瞄准镜</p>
+  <div style="display:grid;gap:8px">
+    <div style="background:#332b22;border:1px solid #4a3f30;padding:12px"><b style="color:#e8963a">手枪类</b><br><span style="color:#a89880;font-size:12px">.38特种弹(6发) | .357马格南(6发) | 9mm(17发有弹匣) | .45ACP(8发有弹匣) | 5.7X28mm(30发有弹匣)</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;padding:12px"><b style="color:#e8963a">冲锋枪</b><br><span style="color:#a89880;font-size:12px">9mm(30发有弹匣) | 5.7X28mm(50发有弹匣)</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;padding:12px"><b style="color:#e8963a">霰弹枪</b><br><span style="color:#a89880;font-size:12px">12号霰弹：2发 | 8发 | 12发</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;padding:12px"><b style="color:#e8963a">步枪类</b><br><span style="color:#a89880;font-size:12px">7.62mm(5发) | 5.56mm(30发有弹匣) | 7.62mm(30发有弹匣)</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;padding:12px"><b style="color:#e8963a">狙击枪</b><br><span style="color:#a89880;font-size:12px">7.62mm(5发，自带倍镜)</span></div>
+    <div style="background:#332b22;border:1px solid #4a3f30;padding:12px"><b style="color:#e8963a">其他弹药</b><br><span style="color:#a89880;font-size:12px">电击枪弹药 | 信号弹 | 铁箭</span></div>
+  </div>
+</div>
+
 <script>
 function showHome(){document.getElementById('homeView').style.display='block';document.getElementById('appView').style.display='none';window.scrollTo(0,0);}
 function showApp(){document.getElementById('homeView').style.display='none';document.getElementById('appView').style.display='block';window.scrollTo(0,0);}
+/* URL 带 ?app=1 时直达查询工具（从主页卡片跳转） */
+if(new URLSearchParams(window.location.search).get('app')==='1'){showApp();}
+function switchTab(name){
+  document.querySelectorAll('.tab-btn').forEach(b=>{
+    if(b.dataset.tab===name){b.classList.add('active');b.style.background='#e8963a';b.style.color='#1a1612';b.style.fontWeight='700';}
+    else{b.classList.remove('active');b.style.background='none';b.style.color='#a89880';b.style.fontWeight='normal';b.style.border='1px solid #4a3f30';}
+  });
+  ['recipe','skills','survival','tools','guns'].forEach(t=>{
+    document.getElementById(t+'Tab').style.display = (t===name)?'block':'none';
+  });
+  window.scrollTo(0,0);
+}
 </script>
 </body>
 </html>
