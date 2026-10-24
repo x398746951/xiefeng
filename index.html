@@ -1799,8 +1799,7 @@ render();
 <script>
 function showHome(){document.getElementById('homeView').style.display='block';document.getElementById('appView').style.display='none';window.scrollTo(0,0);}
 function showApp(){document.getElementById('homeView').style.display='none';document.getElementById('appView').style.display='block';window.scrollTo(0,0);}
-/* URL 带 ?app=1 时直达查询工具（从主页卡片跳转） */
-if(new URLSearchParams(window.location.search).get('app')==='1'){showApp();}
+showApp();
 function switchTab(name){
   document.querySelectorAll('.tab-btn').forEach(b=>{
     if(b.dataset.tab===name){b.classList.add('active');b.style.background='#e8963a';b.style.color='#1a1612';b.style.fontWeight='700';}
