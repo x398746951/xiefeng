@@ -21,12 +21,11 @@
     line-height:1.6; padding:16px 24px; max-width:100%; margin:0;
   }
   header{margin-bottom:18px;}
-  header .dlbar{margin-top:12px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
-  header .dlbtn{display:inline-block; background:var(--accent); color:var(--onaccent); border-radius:6px;
-    padding:9px 18px; font-size:13px; font-weight:700; text-decoration:none;}
-  header .dlbtn:hover{background:var(--accent2);}
-  header .dlrepo{font-size:12px; color:var(--dim); text-decoration:none; border-bottom:1px dashed var(--line);}
-  header .dlrepo:hover{color:var(--accent); border-color:var(--accent);}
+  .tabbar-sep{width:1px; height:20px; background:var(--line); margin:0 2px;}
+  .tab-btn.dltab{border-color:var(--accent); color:var(--accent); text-decoration:none; display:inline-block;}
+  .tab-btn.dltab:hover{background:var(--accent); color:var(--onaccent); border-color:var(--accent);}
+  .tab-author{font-size:12px; color:var(--dim); white-space:nowrap; padding:0 2px;}
+  .tab-author b{color:var(--text); font-weight:700;}
   h1{font-size:22px; letter-spacing:1px;}
   h1 small{font-size:13px; color:var(--dim); font-weight:normal; margin-left:8px;}
   .subtitle{color:var(--dim); font-size:13px; margin-top:4px;}
@@ -388,10 +387,13 @@
     <button class="tab-btn" data-tab="weapon" onclick="switchTab('weapon')">武器</button>
     <button class="tab-btn" data-tab="char" onclick="switchTab('char')">角色档案</button>
     <button class="tab-btn" data-tab="skilltab" onclick="switchTab('skilltab')">技能速查</button>
+    <span class="tabbar-sep"></span>
+    <a class="tab-btn dltab" href="index.html" download="VEIN配方查询表.html">下载本表</a>
+    <a class="tab-btn dltab" href="https://github.com/x398746951/xiefeng" target="_blank" rel="noopener">GitHub 源码</a>
+    <span class="tab-author">作者 抖音：<b>谢峰XFzz</b></span>
   </div>
 <header>
   <h1>VEIN 配方查询表<small>VEIN Crafting Recipe Browser · 输入物品名，自动跳出材料 · Type item name to see ingredients</small></h1>
-  <div class="dlbar"><a class="dlbtn" href="index.html" download="VEIN配方查询表.html">下载本表</a><a class="dlrepo" href="https://github.com/x398746951/xiefeng" target="_blank" rel="noopener">GitHub 源码</a></div>
   </header>
 
 <div id="recipeTab">
