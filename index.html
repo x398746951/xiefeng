@@ -21,6 +21,12 @@
     line-height:1.6; padding:16px 24px; max-width:100%; margin:0;
   }
   header{margin-bottom:18px;}
+  header .dlbar{margin-top:12px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+  header .dlbtn{display:inline-block; background:var(--accent); color:var(--onaccent); border-radius:6px;
+    padding:9px 18px; font-size:13px; font-weight:700; text-decoration:none;}
+  header .dlbtn:hover{background:var(--accent2);}
+  header .dlrepo{font-size:12px; color:var(--dim); text-decoration:none; border-bottom:1px dashed var(--line);}
+  header .dlrepo:hover{color:var(--accent); border-color:var(--accent);}
   h1{font-size:22px; letter-spacing:1px;}
   h1 small{font-size:13px; color:var(--dim); font-weight:normal; margin-left:8px;}
   .subtitle{color:var(--dim); font-size:13px; margin-top:4px;}
@@ -385,6 +391,7 @@
   </div>
 <header>
   <h1>VEIN 配方查询表<small>VEIN Crafting Recipe Browser · 输入物品名，自动跳出材料 · Type item name to see ingredients</small></h1>
+  <div class="dlbar"><a class="dlbtn" href="index.html" download="VEIN配方查询表.html">下载本表</a><a class="dlrepo" href="https://github.com/x398746951/xiefeng" target="_blank" rel="noopener">GitHub 源码</a></div>
   </header>
 
 <div id="recipeTab">
