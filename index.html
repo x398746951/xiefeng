@@ -13,6 +13,7 @@
     --green:#6a8a4a; --red:#d96a5a;
     --onaccent:#1a1612; --good:#8fd3a0; --good2:#b8f0c8; --warn:#e2a24f;
     --hit:#231c13; --hi:#ffd08a; --gold:#f5c04a; --badgeok:#e3b877; --badgeedit:#ffe3b3;
+    --grip:#6b5b46;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   body{
@@ -2638,9 +2639,8 @@ window.addEventListener("load", function(){ try{ render(); }catch(e){} });
 #cheatTab .ctable,#cheatTab .itable{position:relative}
 #cheatTab .crh,#cheatTab .irh{position:absolute;width:15px;margin-left:-7.5px;cursor:col-resize;z-index:6;
   display:flex;align-items:center;justify-content:center;touch-action:none}
-#cheatTab .crh i,#cheatTab .irh i{display:block;width:2px;height:100%;background:var(--accent);opacity:.72;border-radius:1px;transition:background .12s,opacity .12s,width .12s}
-#cheatTab .crh:hover i,#cheatTab .irh:hover i,#cheatTab .crh.drag i,#cheatTab .irh.drag i{background:var(--accent);width:3px;opacity:1}
-#cheatTab .crh:hover i,#cheatTab .irh:hover i,#cheatTab .crh.drag i,#cheatTab .irh.drag i{background:var(--accent);width:2px;opacity:1}
+#cheatTab .crh i,#cheatTab .irh i{display:block;width:2px;height:100%;background:var(--grip);opacity:1;border-radius:1px;transition:background .12s,width .12s}
+#cheatTab .crh:hover i,#cheatTab .irh:hover i,#cheatTab .crh.drag i,#cheatTab .irh.drag i{background:var(--accent);width:3px}
 #cheatTab .crh::after,#cheatTab .irh::after{content:'';position:absolute;left:-4px;right:-4px;top:0;bottom:0}
 #cheatTab .crow.head{background:var(--panel2);color:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:1px}
 #cheatTab .crow .ccmd{font-family:Consolas,monospace;color:var(--good);font-size:12px;word-break:break-all;cursor:pointer;border-bottom:1px dashed #4a6a55;display:inline-block;justify-self:start;max-width:100%;padding-bottom:1px}
@@ -2696,6 +2696,7 @@ window.addEventListener("load", function(){ try{ render(); }catch(e){} });
     --green:#4a7a37; --red:#b1462f;
     --onaccent:#ffffff; --good:#2b7a49; --good2:#1c5c37; --warn:#a3560c;
     --hit:#fff8ea; --hi:#8a5a12; --gold:#a35a06; --badgeok:#8a5512; --badgeedit:#7a4407;
+    --grip:#bcab90;
   }
   body{background:var(--bg); color:var(--text);}
   #tabbar{box-shadow:0 2px 10px rgba(120,100,70,.14);}
@@ -2762,13 +2763,13 @@ window.addEventListener("load", function(){ try{ render(); }catch(e){} });
 
 <div id="cheatTab" style="display:none">
   <h2>秘籍 / 控制台命令</h2>
-  <p class="csub">单人游戏按 <b style="color:var(--hi)">~</b> 键（数字1左边那个）开控制台直接输。单人你就是管理员，所有命令生效。按 <b style="color:var(--hi)">\</b> 键打开图形菜单点按钮更省事。<br><b style="color:var(--hi)">表格列与列之间那条橙线，按住左右拖就能调列宽（双击橙线恢复默认）。</b></p>
+  <p class="csub">单人游戏按 <b style="color:var(--hi)">~</b> 键（数字1左边那个）开控制台直接输。单人你就是管理员，所有命令生效。按 <b style="color:var(--hi)">\</b> 键打开图形菜单点按钮更省事。<br><b style="color:var(--hi)">表格每列之间那条竖线，鼠标移上去会变橙，按住左右拖就能调列宽（双击恢复默认）。</b></p>
   <div class="cwarn">⚠ 联机进别人服务器，这些命令只有服主/管理员能用，普通玩家输了会被拒绝。<b>DeleteSaveGame / DeleteAllSaveGames</b> 这种命令别手贱输，直接删存档。</div>  <div class="cchips" id="cChips"></div>
   <div class="ctable" id="cTable"></div>
 <!--ZBLOCK:START-->
   <div class="isec">
     <h3>物品代码 · 中文对照</h3>
-    <p>全部来自你的截图和那张指令表，每个类名都对着游戏核对过。上面那排按钮点一下按分类筛，<b>点一下绿色那行就能复制整条命令</b>，粘到 <b>~</b> 控制台回车就行。数量默认 <b>1</b>，想多刷就把末尾数字改大，比如把 1 改成 20。<b style="color:var(--hi)">列间的橙线可以左右拖调列宽。</b></p>
+    <p>全部来自你的截图和那张指令表，每个类名都对着游戏核对过。上面那排按钮点一下按分类筛，<b>点一下绿色那行就能复制整条命令</b>，粘到 <b>~</b> 控制台回车就行。数量默认 <b>1</b>，想多刷就把末尾数字改大，比如把 1 改成 20。<b style="color:var(--hi)">列间的竖线可以左右拖调列宽（移上去会变橙）。</b></p>
     <div class="cchips" id="iChips"></div>
     <input id="iq" placeholder="输中文、代码或命令，例如：披萨 / 丧尸宁 / Zombrin">
     <div class="iveh" id="ivehHint" style="display:none"><b>载具没有控制台命令，GiveItem 刷不出来（已实测无效）。</b>出车只能这么来：控制台输 <b>openadminmenu</b> 开管理员菜单 → 在「选择载具」下拉里选下面这一条（车生成在你附近）。车出来后别急着开，<b>走到车旁边</b>先输 <b>FillFuel</b> 加满油、再输 <b>RepairMyVehicle</b> 把车况修好，不然开出去容易趴窝。下面点的复制只是<b>类名</b>，拿去菜单里对照着找车用。</div>
@@ -3254,8 +3255,9 @@ function colPlace(k){
   });
 }
 function colBind(k, h){
-  h.addEventListener("mousedown", function(ev){
+  h.addEventListener("pointerdown", function(ev){
     ev.preventDefault(); ev.stopPropagation();
+    try{ h.setPointerCapture(ev.pointerId); }catch(e){}
     var which = parseInt(h.getAttribute("data-which"), 10);
     var box = colBox(k); var head = box.querySelector(COLW[k].head);
     var cfg = COLW[k];
@@ -3275,11 +3277,12 @@ function colBind(k, h){
     }
     function up(){
       h.classList.remove("drag"); document.body.style.cursor = "";
-      document.removeEventListener("mousemove", mv); document.removeEventListener("mouseup", up);
+      document.removeEventListener("pointermove", mv); document.removeEventListener("pointerup", up);
+      try{ h.releasePointerCapture(ev.pointerId); }catch(e){}
       var o = colWp(k); if(which === 1){ o.c1 = Math.round(v); } else { o.c3 = Math.round(v); }
       colWs(k, o); colLayout(k);
     }
-    document.addEventListener("mousemove", mv); document.addEventListener("mouseup", up);
+    document.addEventListener("pointermove", mv); document.addEventListener("pointerup", up);
   });
   h.addEventListener("dblclick", function(ev){
     ev.preventDefault(); ev.stopPropagation();
