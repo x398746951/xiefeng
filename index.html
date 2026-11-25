@@ -2636,9 +2636,10 @@ window.addEventListener("load", function(){ try{ render(); }catch(e){} });
 #cheatTab .crow{display:grid;grid-template-columns:var(--ccw1,230px) minmax(120px,1fr) var(--ccw3,1.2fr);gap:10px;padding:9px 14px;border-bottom:1px solid var(--line);font-size:13px;align-items:baseline}
 #cheatTab .crow:last-child{border-bottom:none}
 #cheatTab .ctable,#cheatTab .itable{position:relative}
-#cheatTab .crh,#cheatTab .irh{position:absolute;width:11px;margin-left:-5.5px;cursor:col-resize;z-index:6;
+#cheatTab .crh,#cheatTab .irh{position:absolute;width:15px;margin-left:-7.5px;cursor:col-resize;z-index:6;
   display:flex;align-items:center;justify-content:center;touch-action:none}
-#cheatTab .crh i,#cheatTab .irh i{display:block;width:1px;height:calc(100% - 8px);background:var(--line);opacity:.75;transition:background .12s,opacity .12s}
+#cheatTab .crh i,#cheatTab .irh i{display:block;width:2px;height:100%;background:var(--accent);opacity:.72;border-radius:1px;transition:background .12s,opacity .12s,width .12s}
+#cheatTab .crh:hover i,#cheatTab .irh:hover i,#cheatTab .crh.drag i,#cheatTab .irh.drag i{background:var(--accent);width:3px;opacity:1}
 #cheatTab .crh:hover i,#cheatTab .irh:hover i,#cheatTab .crh.drag i,#cheatTab .irh.drag i{background:var(--accent);width:2px;opacity:1}
 #cheatTab .crh::after,#cheatTab .irh::after{content:'';position:absolute;left:-4px;right:-4px;top:0;bottom:0}
 #cheatTab .crow.head{background:var(--panel2);color:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:1px}
@@ -2650,7 +2651,7 @@ window.addEventListener("load", function(){ try{ render(); }catch(e){} });
 #cheatTab .crow .cnum{font-style:normal;color:var(--good);font-size:10px;border:1px solid #4a6a55;border-radius:8px;padding:0 4px;margin-left:5px;vertical-align:1px}
 #cheatTab .chelp{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--dim);line-height:1.8}
 #cheatTab .chelp b{color:var(--hi)}
-@media(max-width:760px){#cheatTab{padding:14px 12px}#cheatTab .crow{grid-template-columns:1fr;gap:3px}#cheatTab .crh,#cheatTab .irh{display:none}}
+@media(max-width:640px){#cheatTab{padding:14px 12px}#cheatTab .crow{grid-template-columns:1fr;gap:3px}#cheatTab .crh,#cheatTab .irh{display:none}}
 
 /*ZCSS:START*/
 #cheatTab .isec{margin-top:22px}
@@ -2678,7 +2679,7 @@ window.addEventListener("load", function(){ try{ render(); }catch(e){} });
 #cheatTab .wreset:hover{opacity:.9}
 #cheatTab .irow.hot{border-left:2px solid var(--accent);padding-left:13px}
 #cheatTab .irow.copied{border-left:3px solid var(--gold);padding-left:12px}
-@media(max-width:760px){#cheatTab .irow{grid-template-columns:1fr;gap:5px;padding:11px 12px}#cheatTab .irh{display:none}}
+@media(max-width:640px){#cheatTab .irow{grid-template-columns:1fr;gap:5px;padding:11px 12px}#cheatTab .irh{display:none}}
 
 /* 秘籍：手动常用（点星标） */
 #cheatTab .cfav{background:none;border:none;color:#6b5b45;opacity:.5;font-size:13px;cursor:pointer;padding:0 7px 0 0;line-height:1;vertical-align:-1px}
@@ -2761,13 +2762,13 @@ window.addEventListener("load", function(){ try{ render(); }catch(e){} });
 
 <div id="cheatTab" style="display:none">
   <h2>秘籍 / 控制台命令</h2>
-  <p class="csub">单人游戏按 <b style="color:var(--hi)">~</b> 键（数字1左边那个）开控制台直接输。单人你就是管理员，所有命令生效。按 <b style="color:var(--hi)">\</b> 键打开图形菜单点按钮更省事。</p>
+  <p class="csub">单人游戏按 <b style="color:var(--hi)">~</b> 键（数字1左边那个）开控制台直接输。单人你就是管理员，所有命令生效。按 <b style="color:var(--hi)">\</b> 键打开图形菜单点按钮更省事。<br><b style="color:var(--hi)">表格列与列之间那条橙线，按住左右拖就能调列宽（双击橙线恢复默认）。</b></p>
   <div class="cwarn">⚠ 联机进别人服务器，这些命令只有服主/管理员能用，普通玩家输了会被拒绝。<b>DeleteSaveGame / DeleteAllSaveGames</b> 这种命令别手贱输，直接删存档。</div>  <div class="cchips" id="cChips"></div>
   <div class="ctable" id="cTable"></div>
 <!--ZBLOCK:START-->
   <div class="isec">
     <h3>物品代码 · 中文对照</h3>
-    <p>全部来自你的截图和那张指令表，每个类名都对着游戏核对过。上面那排按钮点一下按分类筛，<b>点一下绿色那行就能复制整条命令</b>，粘到 <b>~</b> 控制台回车就行。数量默认 <b>1</b>，想多刷就把末尾数字改大，比如把 1 改成 20。</p>
+    <p>全部来自你的截图和那张指令表，每个类名都对着游戏核对过。上面那排按钮点一下按分类筛，<b>点一下绿色那行就能复制整条命令</b>，粘到 <b>~</b> 控制台回车就行。数量默认 <b>1</b>，想多刷就把末尾数字改大，比如把 1 改成 20。<b style="color:var(--hi)">列间的橙线可以左右拖调列宽。</b></p>
     <div class="cchips" id="iChips"></div>
     <input id="iq" placeholder="输中文、代码或命令，例如：披萨 / 丧尸宁 / Zombrin">
     <div class="iveh" id="ivehHint" style="display:none"><b>载具没有控制台命令，GiveItem 刷不出来（已实测无效）。</b>出车只能这么来：控制台输 <b>openadminmenu</b> 开管理员菜单 → 在「选择载具」下拉里选下面这一条（车生成在你附近）。车出来后别急着开，<b>走到车旁边</b>先输 <b>FillFuel</b> 加满油、再输 <b>RepairMyVehicle</b> 把车况修好，不然开出去容易趴窝。下面点的复制只是<b>类名</b>，拿去菜单里对照着找车用。</div>
@@ -3248,8 +3249,8 @@ function colPlace(k){
   hs[0].style.left = (r0.right - br.left + g1/2) + "px";
   hs[1].style.left = (r3.left - br.left - g2/2) + "px";
   Array.prototype.forEach.call(hs, function(h){
-    h.style.top = (hr.top - br.top) + "px";
-    h.style.height = hr.height + "px";
+    h.style.top = "0px";
+    h.style.height = br.height + "px";
   });
 }
 function colBind(k, h){
